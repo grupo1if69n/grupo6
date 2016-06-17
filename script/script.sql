@@ -5,3 +5,9 @@ CREATE TABLE usuario(
 	constraint u_pk
 		primary key(u_nome)
 );
+
+create table Produto(
+ idProduto Serial primary key,
+ nomeProduto varchar(100) not null,
+ precoProduto float not null
+);
