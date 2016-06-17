@@ -26,7 +26,8 @@
                                    required="true" 
                                    value="#{usuarioBean.usuario.USenha}" 
                                    requiredMessage="Informe uma senha."
-                                   validatorMessage="Senha deve ter no máximo 30 caracteres.">
+                                   validatorMessage="Senha deve ter no máximo 30 caracteres."
+                                   pt:autofocus="true">
                         <f:validateLength minimum="1" maximum="30" />
                     </h:inputSecret>
                 </h:panelGrid>

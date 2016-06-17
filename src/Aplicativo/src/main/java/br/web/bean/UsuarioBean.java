@@ -8,6 +8,9 @@ package br.web.bean;
 import br.jpa.controller.UsuarioJpaController;
 import br.jpa.entity.Usuario;
 import br.web.utils.SessionContext;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -111,6 +114,18 @@ public class UsuarioBean {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Senha incorreta!", "Senha incorreta!");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
+    }
+
+    public List<Usuario> searchResults() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("AplicativoPU");
+        UsuarioJpaController ujc = new UsuarioJpaController(emf);
+        return ujc.findUsuarioLike(this.usuario.getUNome());
+    }
+
+    public String searchNumbers() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("AplicativoPU");
+        UsuarioJpaController ujc = new UsuarioJpaController(emf);
+        return "Total de resultados: " + ujc.findUsuarioLike(this.usuario.getUNome()).size();
     }
 
 }
