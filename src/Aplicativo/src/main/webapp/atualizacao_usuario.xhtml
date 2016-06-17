@@ -26,7 +26,8 @@
                                  value="#{usuarioBean.usuario.UCelular}" 
                                  requiredMessage="Informe um número de celular."
                                  validatorMessage="Número de celular inválido."
-                                 pt:placeholder="Ex.: 01 234567890">
+                                 pt:placeholder="Ex.: 01 234567890"
+                                 pt:autofocus="true">
                         <f:validateRegex pattern="[0-9]{2} [0-9]{8,9}" />
                     </h:inputText>
                 </h:panelGrid>
