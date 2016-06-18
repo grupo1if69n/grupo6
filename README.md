@@ -26,6 +26,8 @@ Observação:
    - Clique no botão "Adicionar Classe" e inclua as Classes de Entidade do projeto;
    - Vá na aba "Código-fonte" e verifique se as informações estão de acordo com sua conexão;
    - Execute o projeto novamente.
+   
+   
 ---
 
 # Instruções gerais sobre o uso do GitHub para a execução do projeto:
