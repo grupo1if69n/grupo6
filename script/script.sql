@@ -11,3 +11,9 @@ create table Produto(
  nomeProduto varchar(100) not null,
  precoProduto float not null
 );
+
+create table Conta(
+ idConta Serial primary key,
+ nomeConta varchar(100) not null,
+ valorTotal float not null
+);
