@@ -19,7 +19,7 @@
             Usuários:
             <br/>
             <br/>
-            <h:selectManyCheckbox value="#{produtoBean.selecionados}">
+            <h:selectManyCheckbox value="#{produtoBean.selecionados}" required="true">
                 <f:selectItems value="#{usuarioBean.allUsers}" var="u"
                                itemLabel="#{u.UNome}" itemValue="#{u.UNome}" />
             </h:selectManyCheckbox>
