@@ -6,37 +6,67 @@
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
     <h:head>
         <title>Facelet Title</title>
-    
+        <style type="text/css">
+            #info_box{
+                display: none;
+            }
+            #add_produto{
+                display: none;
+            }
+        </style>
+        <script type="text/javascript">
+            
+            function addForm(){
+                document.getElementById('add_produto').style.display = 'block';
+                document.getElementById('add_button').style.display = 'none';   
+            }
+            function closeFormAdd(){
+                document.getElementById('add_produto').style.display = 'none'
+                document.getElementById('add_button').style.display = 'inline-block';
+            }
+        </script>
+
     </h:head>
     <h:body>
-        Adicionar Produto a lista.
-        <hr/>
-        <h:form id="add_form">
-            Produto:
-            <h:inputText value="#{produtoBean.produto}" required="true"/>
-            Preço:
-            <h:inputText value="#{produtoBean.preco}" required="true"/>
-            Usuários:
-            <br/>
-            <br/>
-            <h:selectManyCheckbox value="#{produtoBean.selecionados}" required="true">
-                <f:selectItems value="#{usuarioBean.allUsers}" var="u"
-                               itemLabel="#{u.UNome}" itemValue="#{u.UNome}" />
-            </h:selectManyCheckbox>
+        <div id="add_produto">
+            Adicionar Produto a lista.
+            <hr/>
+            <h:form id="add_form">
+                Produto:
+                <h:inputText value="#{produtoBean.produto}" required="true"/>
+                Preço:
+                <h:inputText value="#{produtoBean.preco}" required="true"/>
+                Usuários:
+                <br/>
+                <br/>
+                <h:selectManyCheckbox value="#{produtoBean.selecionados}" required="true">
+                    <f:selectItems value="#{usuarioBean.allUsers}" var="u"
+                                   itemLabel="#{u.UNome}" itemValue="#{u.UNome}" />
+                </h:selectManyCheckbox>
 
-            <h:commandButton value="Adicionar" actionListener="#{produtoBean.adicionar()}"/>
+                <h:commandButton value="Adicionar" actionListener="#{produtoBean.adicionar()}"/>
 
-            <h:commandButton value="Limpar" actionListener="#{produtoBean.clean()}"/>
+                <h:commandButton value="Limpar" actionListener="#{produtoBean.clean()}">
+                <f:ajax execute="click" render="add_form" />
+                </h:commandButton>
+                
+                  <h:commandButton value ="Fechar" onclick="closeFormAdd()">
+                    <f:ajax execute="click" render="add_form" />
+                </h:commandButton>
 
 
-        </h:form>
-        <hr></hr>
+            </h:form>
+            <hr></hr>
+        </div>
         Lista de produtos
-        <h:form>
+        <h:commandButton id="add_button" value="+" onclick="addForm()">
+            <f:ajax execute="click" render="add_form" />
+        </h:commandButton>
+        <h:form id="form-data">
             <h:dataTable value="#{produtoBean.allProdutos}" var="p">
                 <h:column>
                     <f:facet name="header">ID</f:facet>  
-                    <center> <h:outputText id="pID" value ="#{p.idproduto}"/></center>
+                    <center> <h:outputText value ="#{p.idproduto}"/></center>
                 </h:column>
                 <h:column>
                     <f:facet name="header">Produto</f:facet>  
@@ -51,7 +81,9 @@
                     <center><h:outputText value ="#{p.precoproduto}"/></center>
                 </h:column>
                 <h:column>
-                    <h:commandButton value="Info" actionListener="#{produtoBean.getUsers_por_produto(p.idproduto)}"/>
+                    <h:commandButton value="Info" onclick="document.getElementById('info_box').style.display = 'block'" action="#{produtoBean.getUsers_por_produto(p.idproduto)}">
+                        <f:ajax execute="click" render="form_info" />
+                    </h:commandButton>
                 </h:column>
                 <h:column>
                     <h:commandButton value="Editar" actionListener="#{produtoBean.loadData(p)}"/>
@@ -63,7 +95,7 @@
         </h:form> 
 
         <div id="info_box">
-            <h:form>
+            <h:form id="form_info">
                 <hr></hr>
                 Detalhes:
                 <h:dataTable value="#{produtoBean.users_por_produto}" var="u1">
@@ -72,7 +104,9 @@
                         <center> <h:outputText value ="#{u1.UNome}"/></center>
                     </h:column> 
                 </h:dataTable>
-                <h:commandButton value ="Fechar" actionListener="#{produtoBean.limparDetalhes}"/>
+                <h:commandButton value ="Fechar" onclick="document.getElementById('info_box').style.display = 'none';"  actionListener="#{produtoBean.limparDetalhes}">
+                    <f:ajax execute="click" render="info_box" />
+                </h:commandButton>
             </h:form>
         </div>
 
