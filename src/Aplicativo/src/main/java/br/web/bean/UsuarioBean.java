@@ -8,9 +8,8 @@ package br.web.bean;
 import br.jpa.controller.UsuarioJpaController;
 import br.jpa.entity.Usuario;
 import br.web.utils.SessionContext;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -28,16 +27,26 @@ public class UsuarioBean {
 
     private Usuario usuario;
     private String confirmaSenha;
+    private List<Usuario> usuarios;
 
     /**
      * Creates a new instance of UsuarioBean
      */
     public UsuarioBean() {
         this.usuario = new Usuario();
+        this.usuarios = new ArrayList<>();
     }
 
     public Usuario getUsuario() {
         return usuario;
+    }
+
+    public List<Usuario> getUsuarios() {
+        return usuarios;
+    }
+
+    public void setUsuarios(List<Usuario> usuarios) {
+        this.usuarios = usuarios;
     }
 
     public void setUsuario(Usuario usuario) {
@@ -120,6 +129,12 @@ public class UsuarioBean {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("AplicativoPU");
         UsuarioJpaController ujc = new UsuarioJpaController(emf);
         return ujc.findUsuarioLike(this.usuario.getUNome());
+    }
+    
+    public List<Usuario> getAllUsers(){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("AplicativoPU");
+        UsuarioJpaController ujc = new UsuarioJpaController(emf);
+        return ujc.findUsuarioEntities();
     }
 
     public String searchNumbers() {

@@ -5,19 +5,25 @@
  */
 package br.jpa.entity;
 
+import br.jpa.controller.ProdutoJpaController;
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+
 
 /**
  *
@@ -31,6 +37,14 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Produto.findByIdproduto", query = "SELECT p FROM Produto p WHERE p.idproduto = :idproduto"),
     @NamedQuery(name = "Produto.findByNomeproduto", query = "SELECT p FROM Produto p WHERE p.nomeproduto = :nomeproduto"),
     @NamedQuery(name = "Produto.findByPrecoproduto", query = "SELECT p FROM Produto p WHERE p.precoproduto = :precoproduto")})
+@NamedNativeQueries({
+    @NamedNativeQuery(
+            name = "getAllUsersFromProduct",
+            query = "select * from usuario u, usuario_produto pu where (u.u_nome = pu.u_nome) and pu.produto=?;",
+            resultClass = Usuario.class
+    )
+      
+})
 public class Produto implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -48,6 +62,8 @@ public class Produto implements Serializable {
     @NotNull
     @Column(name = "precoproduto")
     private double precoproduto;
+    @ManyToMany(mappedBy = "produtoCollection")
+    private List<Usuario> usuarioCollection;
 
     public Produto() {
     }
@@ -86,6 +102,19 @@ public class Produto implements Serializable {
         this.precoproduto = precoproduto;
     }
 
+    public int getQtdUsersProduct(int id) {
+
+        return ProdutoJpaController.getInstance().getAllUsersFromProduct(id).size();
+    }
+
+    public List<Usuario> getUsuarioCollection() {
+        return usuarioCollection;
+    }
+
+    public void setUsuarioCollection(List<Usuario> usuarioCollection) {
+        this.usuarioCollection = usuarioCollection;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -111,6 +140,6 @@ public class Produto implements Serializable {
         return "Produto{" + "idproduto=" + idproduto + ", nomeproduto=" + nomeproduto + ", precoproduto=" + precoproduto + '}';
     }
 
+   
 
-    
 }

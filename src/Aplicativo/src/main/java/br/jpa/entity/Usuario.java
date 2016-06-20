@@ -6,10 +6,14 @@
 package br.jpa.entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -28,8 +32,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
     @NamedQuery(name = "Usuario.findAllUNomeLike", query = "SELECT u FROM Usuario u WHERE u.uNome like :uNome"),
     @NamedQuery(name = "Usuario.findByUNome", query = "SELECT u FROM Usuario u WHERE u.uNome = :uNome"),
-    @NamedQuery(name = "Usuario.findByUSenha", query = "SELECT u FROM Usuario u WHERE u.uSenha = :uSenha"),
-    @NamedQuery(name = "Usuario.findByUCelular", query = "SELECT u FROM Usuario u WHERE u.uCelular = :uCelular")})
+    @NamedQuery(name = "Usuario.findByUCelular", query = "SELECT u FROM Usuario u WHERE u.uCelular = :uCelular"),
+    @NamedQuery(name = "Usuario.findByUSenha", query = "SELECT u FROM Usuario u WHERE u.uSenha = :uSenha")})
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -50,17 +54,23 @@ public class Usuario implements Serializable {
     @Column(name = "u_celular")
     private String uCelular;
 
-    public Usuario() {
-    }
+    @JoinTable(name = "usuario_produto", joinColumns = {
+        @JoinColumn(name = "u_nome", referencedColumnName = "u_nome")}, inverseJoinColumns = {
+        @JoinColumn(name = "produto", referencedColumnName = "idproduto")})
+    @ManyToMany
+    private List<Produto> produtoCollection;
 
-    public Usuario(String uNome) {
-        this.uNome = uNome;
+    public Usuario() {
     }
 
     public Usuario(String uNome, String uSenha, String uCelular) {
         this.uNome = uNome;
         this.uSenha = uSenha;
         this.uCelular = uCelular;
+    }
+
+    public Usuario(String uNome) {
+        this.uNome = uNome;
     }
 
     public String getUNome() {
@@ -71,6 +81,14 @@ public class Usuario implements Serializable {
         this.uNome = uNome;
     }
 
+    public String getUCelular() {
+        return uCelular;
+    }
+
+    public void setUCelular(String uCelular) {
+        this.uCelular = uCelular;
+    }
+
     public String getUSenha() {
         return uSenha;
     }
@@ -79,12 +97,13 @@ public class Usuario implements Serializable {
         this.uSenha = uSenha;
     }
 
-    public String getUCelular() {
-        return uCelular;
+   
+    public List<Produto> getProdutoCollection() {
+        return produtoCollection;
     }
 
-    public void setUCelular(String uCelular) {
-        this.uCelular = uCelular;
+    public void setProdutoCollection(List<Produto> produtoCollection) {
+        this.produtoCollection = produtoCollection;
     }
 
     @Override
@@ -109,7 +128,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "br.jpa.entity.Usuario[ uNome=" + uNome + " ]";
+        return "Usuario{" + "uNome=" + uNome + ", uSenha=" + uSenha + ", uCelular=" + uCelular + '}';
     }
-    
+
 }
