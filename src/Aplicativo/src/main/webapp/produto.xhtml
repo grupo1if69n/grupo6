@@ -15,12 +15,12 @@
             }
         </style>
         <script type="text/javascript">
-            
-            function addForm(){
+
+            function addForm() {
                 document.getElementById('add_produto').style.display = 'block';
-                document.getElementById('add_button').style.display = 'none';   
+                document.getElementById('add_button').style.display = 'none';
             }
-            function closeFormAdd(){
+            function closeFormAdd() {
                 document.getElementById('add_produto').style.display = 'none'
                 document.getElementById('add_button').style.display = 'inline-block';
             }
@@ -47,10 +47,10 @@
                 <h:commandButton value="Adicionar" actionListener="#{produtoBean.adicionar()}"/>
 
                 <h:commandButton value="Limpar" actionListener="#{produtoBean.clean()}">
-                <f:ajax execute="click" render="add_form" />
+                    <f:ajax execute="click" render="add_form" />
                 </h:commandButton>
-                
-                  <h:commandButton value ="Fechar" onclick="closeFormAdd()">
+
+                <h:commandButton value ="Fechar" onclick="closeFormAdd()">
                     <f:ajax execute="click" render="add_form" />
                 </h:commandButton>
 
@@ -89,7 +89,9 @@
                     <h:commandButton value="Editar" actionListener="#{produtoBean.loadData(p)}"/>
                 </h:column>
                 <h:column>
-                    <h:commandButton value="Deletar" actionListener="#{produtoBean.remove(p)}"/>
+                    <h:commandButton value="Deletar" actionListener="#{produtoBean.remove(p)}">
+                        
+                    </h:commandButton>
                 </h:column>
             </h:dataTable>
         </h:form> 
