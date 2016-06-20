@@ -12,6 +12,16 @@ create table Produto(
  precoProduto float not null
 );
 
+create table usuario_produto(
+ u_nome varchar(30) not null,
+ produto int not null,
+ constraint PK_user_produto primary key(u_nome,produto),
+ constraint FK_user_produto foreign key(u_nome) references
+ usuario(u_nome),
+ constraint FK_user_produto2 foreign key(produto) references
+ Produto(idProduto)
+);
+
 create table Conta(
  idConta Serial primary key,
  nomeConta varchar(100) not null,
