@@ -17,6 +17,19 @@ CREATE TABLE conta(
 		PRIMARY KEY(c_id)
 );
 
+--DROP TABLE usuario_conta;
+CREATE TABLE usuario_conta(
+	u_nome 		VARCHAR(30) 	NOT NULL,
+	c_id		INTEGER		NOT NULL,
+	u_c_valor	FLOAT		NOT NULL,
+	CONSTRAINT u_c_pk 
+		PRIMARY KEY(u_nome, c_id),
+	CONSTRAINT u_nome_fk 
+		FOREIGN KEY (u_nome) REFERENCES usuario(u_nome),
+	CONSTRAINT c_id_fk 
+		FOREIGN KEY (c_id) REFERENCES conta(c_id)
+);
+
 create table Produto(
  idProduto Serial primary key,
  nomeProduto varchar(100) not null,
@@ -32,5 +45,3 @@ create table usuario_produto(
  constraint FK_user_produto2 foreign key(produto) references
  Produto(idProduto)
 );
-
-
