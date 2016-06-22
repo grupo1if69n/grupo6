@@ -12,8 +12,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -33,13 +31,12 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
+    @NamedQuery(name = "Usuario.findAllUNomeLike", query = "SELECT u FROM Usuario u WHERE u.uNome like :uNome"),
+    @NamedQuery(name = "Usuario.findAllUNomeLikeCount", query = "SELECT count(u) FROM Usuario u WHERE u.uNome like :uNome"),
     @NamedQuery(name = "Usuario.findByUNome", query = "SELECT u FROM Usuario u WHERE u.uNome = :uNome"),
     @NamedQuery(name = "Usuario.findByUSenha", query = "SELECT u FROM Usuario u WHERE u.uSenha = :uSenha"),
     @NamedQuery(name = "Usuario.findByUCelular", query = "SELECT u FROM Usuario u WHERE u.uCelular = :uCelular")})
 public class Usuario implements Serializable {
-
-    @ManyToMany(mappedBy = "usuarioCollection")
-    private Collection<Produto> produtoCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -60,9 +57,12 @@ public class Usuario implements Serializable {
     @Size(min = 1, max = 20)
     @Column(name = "u_celular")
     private String uCelular;
-    
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
     private Collection<UsuarioConta> usuarioContaCollection;
+
+    @ManyToMany(mappedBy = "usuarioCollection")
+    private Collection<Produto> produtoCollection;
 
     public Usuario() {
     }
@@ -110,6 +110,16 @@ public class Usuario implements Serializable {
         this.usuarioContaCollection = usuarioContaCollection;
     }
 
+    @XmlTransient
+    public Collection<Produto> getProdutoCollection() {
+        return produtoCollection;
+    }
+
+    public void setProdutoCollection(Collection<Produto> produtoCollection) {
+        this.produtoCollection = produtoCollection;
+    }
+    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -133,15 +143,6 @@ public class Usuario implements Serializable {
     @Override
     public String toString() {
         return "br.jpa.entity.Usuario[ uNome=" + uNome + " ]";
-    }
-
-    @XmlTransient
-    public Collection<Produto> getProdutoCollection() {
-        return produtoCollection;
-    }
-
-    public void setProdutoCollection(Collection<Produto> produtoCollection) {
-        this.produtoCollection = produtoCollection;
     }
     
 }

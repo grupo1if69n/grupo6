@@ -8,14 +8,10 @@ package br.web.bean;
 import br.jpa.controller.UsuarioJpaController;
 import br.jpa.entity.Usuario;
 import br.web.utils.SessionContext;
-import java.util.ArrayList;
-import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 /**
  *
@@ -27,26 +23,16 @@ public class UsuarioBean {
 
     private Usuario usuario;
     private String confirmaSenha;
-    private List<Usuario> usuarios;
 
     /**
      * Creates a new instance of UsuarioBean
      */
     public UsuarioBean() {
         this.usuario = new Usuario();
-        this.usuarios = new ArrayList<>();
     }
 
     public Usuario getUsuario() {
         return usuario;
-    }
-
-    public List<Usuario> getUsuarios() {
-        return usuarios;
-    }
-
-    public void setUsuarios(List<Usuario> usuarios) {
-        this.usuarios = usuarios;
     }
 
     public void setUsuario(Usuario usuario) {
@@ -111,18 +97,6 @@ public class UsuarioBean {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Senha incorreta!", "Senha incorreta!");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
-    }
-
-    public List<Usuario> searchResults() {
-        return UsuarioJpaController.getInstance().findUsuarioLike(this.usuario.getUNome());
-    }
-    
-    public List<Usuario> getAllUsers(){
-        return UsuarioJpaController.getInstance().findUsuarioEntities();
-    }
-
-    public String searchNumbers() {
-        return "Total de resultados: " + UsuarioJpaController.getInstance().findUsuarioLike(this.usuario.getUNome()).size();
     }
 
 }
