@@ -1,10 +1,10 @@
 --DROP TABLE usuario;
 CREATE TABLE usuario(
-	u_nome 		varchar(30) 	not null,
-	u_senha 	varchar(30) 	not null,
-	u_celular 	varchar(20) 	not null,
-	constraint u_pk
-		primary key(u_nome)
+	u_nome 		VARCHAR(30) 	NOT NULL,
+	u_senha 	VARCHAR(30) 	NOT NULL,
+	u_celular 	VARCHAR(20) 	NOT NULL,
+	CONSTRAINT u_pk
+		PRIMARY KEY(u_nome)
 );
 
 create table Produto(
