@@ -3,13 +3,21 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:head>
         <title>Gerenciar Conta</title>
     </h:head>
     <h:body>  
+        <c:set var="conta" value="#{contaBean.contaSessionMenosGerente}" scope="request" />
         <h:form>
-            <h:panelGrid columns="3">   
+            <h:panelGrid columns="3">      
+                <h:commandButton action="#{navigationBean.redirectAtualizacaoConta()}" 
+                                 value="Atualizar conta" />            
+
+                <h:commandButton action="#{contaBean.excluirConta()}"
+                                 value="Excluir conta" />            
+
                 <h:commandButton action="#{navigationBean.redirectSistema()}"
                                  value="Voltar ao sistema principal" />
             </h:panelGrid>
@@ -17,6 +25,21 @@
 
         <h:messages errorStyle="color: red" 
                     infoStyle="color: green" />
+        
+        <h:form>
+            <h3>Informações:</h3>
+            <h:panelGrid columns="2">                
+                <h:outputLabel for="cNome" 
+                               value="Nome da conta: " />
+                <h:outputText id="cNome" 
+                              value="#{conta.CNome}" />
+
+                <h:outputLabel for="cValor" 
+                               value="Valor total: " />
+                <h:outputText id="cValor" 
+                              value="#{conta.CValor}" />
+            </h:panelGrid>
+        </h:form>
 
         <h:form>
             <h3>Adicionar usuários:</h3>
@@ -48,6 +71,37 @@
                 </h:column>
             </h:dataTable>           
         </h:form>
+        
+        <h:form>
+            <h3>Gerenciar usuários:</h3>
+            
+            <h:outputLabel for="cGerente"
+                           value="Gerente da conta: " />
+            <h:outputText id="cGerente"
+                          value="#{conta.CGerente}" />
+            
+            <br />
+            <br />
+            <h:outputText value="Usuários gerenciáveis:" />
+            
+            <h:dataTable value="#{conta.usuarioContaCollection}"
+                         var="usuarioConta" >
+                <h:column>
+                    <h:outputText value="#{usuarioConta.usuario.UNome}" />
+                </h:column>
+
+                <h:column>
+                    <h:commandButton action="#{usuarioContaBean.excluirUsuarioConta(usuarioConta)}"
+                                     value="Remover" />
+                </h:column>
+
+                <h:column>
+                    <h:commandButton action="#{contaBean.tornarGerente(usuarioConta)}"
+                                     value="Tornar Gerente" />
+                </h:column>
+            </h:dataTable> 
+        </h:form>
+        
     </h:body>
 </html>
 

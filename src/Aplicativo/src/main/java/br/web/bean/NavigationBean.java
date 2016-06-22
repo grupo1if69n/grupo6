@@ -46,4 +46,8 @@ public class NavigationBean {
         return "gerenciar_conta?faces-redirect=true";
     }
     
+    public String redirectAtualizacaoConta(){
+        return "atualizacao_conta?faces-redirect=true";
+    }
+    
 }

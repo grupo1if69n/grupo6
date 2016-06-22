@@ -82,7 +82,7 @@ public class ContaBean {
     }
 
     public void atualizarConta() {
-        Conta contaAtualizada = this.getContaSessionMenosGerente();
+        Conta contaAtualizada = ContaJpaController.getInstance().findConta((int)SessionContext.getInstance().getSessionAttribute("cId"));
         contaAtualizada.setCNome(this.conta.getCNome());
 
         try {
