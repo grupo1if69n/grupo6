@@ -6,8 +6,10 @@
 package br.web.bean;
 
 import br.jpa.controller.CacheProduto;
+import br.jpa.controller.ContaJpaController;
 import br.jpa.controller.ProdutoJpaController;
 import br.jpa.controller.UsuarioJpaController;
+import br.jpa.entity.Conta;
 import br.jpa.entity.Produto;
 import br.jpa.entity.Usuario;
 import br.web.utils.SessionContext;
@@ -64,9 +66,9 @@ public class EditarProduto {
     public void edit() {
         System.out.println("EDIT");
         Produto p = new Produto();
-        p.setIdproduto(this.produto.getIdproduto());
-        p.setNomeproduto(this.produto.getNomeproduto());
-        p.setPrecoproduto(this.produto.getPrecoproduto());
+        p.setPId(this.produto.getPId());
+        p.setPNome(this.produto.getPNome());
+        p.setPValor(this.produto.getPValor());
         p.setUsuarioCollection(CacheProduto.getInstance().getUsers());
         System.out.println(p.toString());
         for (Usuario u : CacheProduto.getInstance().getUsers()) {
@@ -137,5 +139,7 @@ public class EditarProduto {
         }
         return resposta;
     }
+    
+  
 
 }

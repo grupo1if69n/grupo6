@@ -5,16 +5,18 @@
  */
 package br.jpa.entity;
 
-import br.jpa.controller.ProdutoJpaController;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedNativeQueries;
 import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
@@ -23,7 +25,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -34,16 +36,23 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Produto.findAll", query = "SELECT p FROM Produto p"),
-    @NamedQuery(name = "Produto.findByIdproduto", query = "SELECT p FROM Produto p WHERE p.idproduto = :idproduto"),
-    @NamedQuery(name = "Produto.findByNomeproduto", query = "SELECT p FROM Produto p WHERE p.nomeproduto = :nomeproduto"),
-    @NamedQuery(name = "Produto.findByPrecoproduto", query = "SELECT p FROM Produto p WHERE p.precoproduto = :precoproduto")})
+    @NamedQuery(name = "Produto.findByPId", query = "SELECT p FROM Produto p WHERE p.pId = :pId"),
+    @NamedQuery(name = "Produto.findByPNome", query = "SELECT p FROM Produto p WHERE p.pNome = :pNome"),
+    @NamedQuery(name = "Produto.findByPValor", query = "SELECT p FROM Produto p WHERE p.pValor = :pValor")})
+
 @NamedNativeQueries({
     @NamedNativeQuery(
             name = "getAllUsersFromProduct",
-            query = "select * from usuario u, usuario_produto pu where (u.u_nome = pu.u_nome) and pu.produto=?;",
+            query = "select * from usuario u, produto_usuario pu where (u.u_nome = pu.u_nome) and pu.p_id=?;",
+            resultClass = Usuario.class
+    ),
+      @NamedNativeQuery(
+            name = "getAllUsersFromAccount",
+            query = "select * from usuario u, usuario_conta uc where (u.u_nome = uc.u_nome) and uc.c_id=?;",
             resultClass = Usuario.class
     )
-      
+        
+
 })
 public class Produto implements Serializable {
 
@@ -51,74 +60,84 @@ public class Produto implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "idproduto")
-    private Integer idproduto;
+    @Column(name = "p_id")
+    private Integer pId;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 100)
-    @Column(name = "nomeproduto")
-    private String nomeproduto;
+    @Size(min = 1, max = 30)
+    @Column(name = "p_nome")
+    private String pNome;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "precoproduto")
-    private double precoproduto;
-    @ManyToMany(mappedBy = "produtoCollection")
-    private List<Usuario> usuarioCollection;
+    @Column(name = "p_valor")
+    private double pValor;
+    @JoinTable(name = "produto_usuario", joinColumns = {
+        @JoinColumn(name = "p_id", referencedColumnName = "p_id")}, inverseJoinColumns = {
+        @JoinColumn(name = "u_nome", referencedColumnName = "u_nome")})
+    @ManyToMany
+    private Collection<Usuario> usuarioCollection;
+    @JoinColumn(name = "c_id", referencedColumnName = "c_id")
+    @ManyToOne(optional = false)
+    private Conta cId;
 
     public Produto() {
     }
 
-    public Produto(Integer idproduto) {
-        this.idproduto = idproduto;
+    public Produto(Integer pId) {
+        this.pId = pId;
     }
 
-    public Produto(Integer idproduto, String nomeproduto, double precoproduto) {
-        this.idproduto = idproduto;
-        this.nomeproduto = nomeproduto;
-        this.precoproduto = precoproduto;
+    public Produto(Integer pId, String pNome, double pValor) {
+        this.pId = pId;
+        this.pNome = pNome;
+        this.pValor = pValor;
     }
 
-    public Integer getIdproduto() {
-        return idproduto;
+    public Integer getPId() {
+        return pId;
     }
 
-    public void setIdproduto(Integer idproduto) {
-        this.idproduto = idproduto;
+    public void setPId(Integer pId) {
+        this.pId = pId;
     }
 
-    public String getNomeproduto() {
-        return nomeproduto;
+    public String getPNome() {
+        return pNome;
     }
 
-    public void setNomeproduto(String nomeproduto) {
-        this.nomeproduto = nomeproduto;
+    public void setPNome(String pNome) {
+        this.pNome = pNome;
     }
 
-    public double getPrecoproduto() {
-        return precoproduto;
+    public double getPValor() {
+        return pValor;
     }
 
-    public void setPrecoproduto(double precoproduto) {
-        this.precoproduto = precoproduto;
+    public void setPValor(double pValor) {
+        this.pValor = pValor;
     }
 
-    public int getQtdUsersProduct(int id) {
-
-        return ProdutoJpaController.getInstance().getAllUsersFromProduct(id).size();
-    }
-
-    public List<Usuario> getUsuarioCollection() {
+    @XmlTransient
+    public Collection<Usuario> getUsuarioCollection() {
         return usuarioCollection;
     }
 
-    public void setUsuarioCollection(List<Usuario> usuarioCollection) {
+    public void setUsuarioCollection(Collection<Usuario> usuarioCollection) {
         this.usuarioCollection = usuarioCollection;
+    }
+
+    public Conta getCId() {
+        return cId;
+    }
+
+    public void setCId(Conta cId) {
+        this.cId = cId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idproduto != null ? idproduto.hashCode() : 0);
+        hash += (pId != null ? pId.hashCode() : 0);
         return hash;
     }
 
@@ -129,7 +148,7 @@ public class Produto implements Serializable {
             return false;
         }
         Produto other = (Produto) object;
-        if ((this.idproduto == null && other.idproduto != null) || (this.idproduto != null && !this.idproduto.equals(other.idproduto))) {
+        if ((this.pId == null && other.pId != null) || (this.pId != null && !this.pId.equals(other.pId))) {
             return false;
         }
         return true;
@@ -137,9 +156,7 @@ public class Produto implements Serializable {
 
     @Override
     public String toString() {
-        return "Produto{" + "idproduto=" + idproduto + ", nomeproduto=" + nomeproduto + ", precoproduto=" + precoproduto + '}';
+        return "br.jpa.entity.Produto[ pId=" + pId + " ]";
     }
-
-   
-
+    
 }

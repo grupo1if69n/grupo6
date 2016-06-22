@@ -61,9 +61,9 @@ public class ProdutoBean {
         }
 
         Produto p = new Produto();
-        p.setIdproduto(pjc.findProdutoEntities().size() + 1);
-        p.setNomeproduto(produto);
-        p.setPrecoproduto(preco);
+        p.setPId(pjc.findProdutoEntities().size() + 1);
+        p.setPNome(produto);
+        p.setPValor(preco);
         for (Usuario u : users) {
             System.out.println(u.toString());
         }
@@ -75,7 +75,7 @@ public class ProdutoBean {
 
     public void remove(Produto produto) {
         try {
-            ProdutoJpaController.getInstance().destroy(produto.getIdproduto());
+            ProdutoJpaController.getInstance().destroy(produto.getPId());
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(ProdutoBean.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -91,7 +91,7 @@ public class ProdutoBean {
   
 
     public void loadData(Produto prod) {
-        int produto_id = prod.getIdproduto();
+        int produto_id = prod.getPId();
         SessionContext.getInstance().setSessionAttribute("produto_edit",produto_id);
         try {
             FacesContext.getCurrentInstance().getExternalContext().redirect("/Aplicativo/faces/editar_produto.xhtml");

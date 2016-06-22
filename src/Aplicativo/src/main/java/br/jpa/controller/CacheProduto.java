@@ -44,8 +44,8 @@ public class CacheProduto {
 
     public void removeItem(Usuario u) {
         if (users.size() <= 1) {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Um produto deve estar atrelado a pelo menos uma pessoa", "Erro");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Um produto deve estar atrelado a pelo menos uma pessoa", "Erro");
+            FacesContext.getCurrentInstance().addMessage("msgs", msg);
         } else {
             this.users.remove(u);
 

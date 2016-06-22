@@ -8,7 +8,7 @@
     <class>br.jpa.entity.UsuarioConta</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://192.168.56.101:5432/grupo6"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/teste_du"/>
       <property name="javax.persistence.jdbc.user" value="teste"/>
       <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
       <property name="javax.persistence.jdbc.password" value="teste"/>

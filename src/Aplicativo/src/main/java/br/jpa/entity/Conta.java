@@ -38,6 +38,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Conta.findByCGerente", query = "SELECT c FROM Conta c WHERE c.cGerente = :cGerente")})
 public class Conta implements Serializable {
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cId")
+    private Collection<Produto> produtoCollection;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -143,6 +146,15 @@ public class Conta implements Serializable {
     @Override
     public String toString() {
         return "br.jpa.entity.Conta[ cId=" + cId + " ]";
+    }
+
+    @XmlTransient
+    public Collection<Produto> getProdutoCollection() {
+        return produtoCollection;
+    }
+
+    public void setProdutoCollection(Collection<Produto> produtoCollection) {
+        this.produtoCollection = produtoCollection;
     }
     
 }

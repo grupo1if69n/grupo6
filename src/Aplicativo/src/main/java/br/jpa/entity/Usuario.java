@@ -12,6 +12,9 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -34,6 +37,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Usuario.findByUSenha", query = "SELECT u FROM Usuario u WHERE u.uSenha = :uSenha"),
     @NamedQuery(name = "Usuario.findByUCelular", query = "SELECT u FROM Usuario u WHERE u.uCelular = :uCelular")})
 public class Usuario implements Serializable {
+
+    @ManyToMany(mappedBy = "usuarioCollection")
+    private Collection<Produto> produtoCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -127,6 +133,15 @@ public class Usuario implements Serializable {
     @Override
     public String toString() {
         return "br.jpa.entity.Usuario[ uNome=" + uNome + " ]";
+    }
+
+    @XmlTransient
+    public Collection<Produto> getProdutoCollection() {
+        return produtoCollection;
+    }
+
+    public void setProdutoCollection(Collection<Produto> produtoCollection) {
+        this.produtoCollection = produtoCollection;
     }
     
 }
