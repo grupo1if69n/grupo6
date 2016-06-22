@@ -1,3 +1,4 @@
+--DROP TABLE usuario;
 CREATE TABLE usuario(
 	u_nome 		varchar(30) 	not null,
 	u_senha 	varchar(30) 	not null,
