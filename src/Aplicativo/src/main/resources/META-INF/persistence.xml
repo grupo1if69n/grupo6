@@ -5,6 +5,7 @@
     <class>br.jpa.entity.Produto</class>
     <class>br.jpa.entity.Usuario</class>
     <class>br.jpa.entity.Conta</class>
+    <class>br.jpa.entity.UsuarioConta</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://192.168.56.101:5432/grupo6"/>
