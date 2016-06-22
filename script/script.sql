@@ -30,18 +30,24 @@ CREATE TABLE usuario_conta(
 		FOREIGN KEY (c_id) REFERENCES conta(c_id)
 );
 
-create table Produto(
- idProduto Serial primary key,
- nomeProduto varchar(100) not null,
- precoProduto float not null
+CREATE TABLE produto(
+	p_id 		SERIAL		NOT NULL,
+	p_nome		VARCHAR(30)	NOT NULL,
+	p_valor		FLOAT		NOT NULL,
+	c_id		INTEGER		NOT NULL,
+	CONSTRAINT p_pk
+		PRIMARY KEY(p_id),
+	CONSTRAINT c_id_fk
+		FOREIGN KEY (c_id) REFERENCES conta(c_id)
 );
 
-create table usuario_produto(
- u_nome varchar(30) not null,
- produto int not null,
- constraint PK_user_produto primary key(u_nome,produto),
- constraint FK_user_produto foreign key(u_nome) references
- usuario(u_nome),
- constraint FK_user_produto2 foreign key(produto) references
- Produto(idProduto)
+CREATE TABLE produto_usuario(
+	p_id		INTEGER		NOT NULL,
+	u_nome		VARCHAR(30)	NOT NULL,
+	CONSTRAINT p_u_pk
+		PRIMARY KEY(p_id, u_nome),
+	CONSTRAINT p_id_fk
+		FOREIGN KEY (p_id) REFERENCES produto(p_id),
+	CONSTRAINT u_nome_fk
+		FOREIGN KEY (u_nome) REFERENCES usuario(u_nome)
 );
