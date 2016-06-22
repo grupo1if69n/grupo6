@@ -62,12 +62,9 @@ public class UsuarioBean {
     }
 
     public void cadastrarUsuario() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("AplicativoPU");
-        UsuarioJpaController ujc = new UsuarioJpaController(emf);
-
         if (usuario.getUSenha().equals(confirmaSenha)) {
             try {
-                ujc.create(usuario);
+                UsuarioJpaController.getInstance().create(usuario);
                 FacesContext.getCurrentInstance().getExternalContext().redirect("/Aplicativo/faces/login.xhtml");
             } catch (Exception ex) {
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Falha no cadastro!", "Falha no cadastro!");
@@ -81,21 +78,15 @@ public class UsuarioBean {
     }
 
     public Usuario getUsuarioSession() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("AplicativoPU");
-        UsuarioJpaController ujc = new UsuarioJpaController(emf);
-
-        return ujc.findUsuario(SessionContext.getInstance().getSessionAttribute("uNome").toString());
+        return UsuarioJpaController.getInstance().findUsuario(SessionContext.getInstance().getSessionAttribute("uNome").toString());
     }
 
     public void atualizarUsuario() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("AplicativoPU");
-        UsuarioJpaController ujc = new UsuarioJpaController(emf);
-
         Usuario usuarioAtualizado = this.getUsuarioSession();
         usuarioAtualizado.setUCelular(this.usuario.getUCelular());
 
         try {
-            ujc.edit(usuarioAtualizado);
+            UsuarioJpaController.getInstance().edit(usuarioAtualizado);
             FacesContext.getCurrentInstance().getExternalContext().redirect("/Aplicativo/faces/sistema.xhtml");
         } catch (Exception ex) {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Falha na atualização dos dados!", "Falha na atualização dos dados!");
@@ -105,14 +96,11 @@ public class UsuarioBean {
     }
 
     public void excluirUsuario() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("AplicativoPU");
-        UsuarioJpaController ujc = new UsuarioJpaController(emf);
-
         Usuario usuarioExcluido = this.getUsuarioSession();
 
         if (this.usuario.getUSenha().equals(usuarioExcluido.getUSenha())) {
             try {
-                ujc.destroy(usuarioExcluido.getUNome());
+                UsuarioJpaController.getInstance().destroy(usuarioExcluido.getUNome());
                 FacesContext.getCurrentInstance().getExternalContext().redirect("/Aplicativo/faces/login.xhtml");
             } catch (Exception ex) {
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Falha na exclusão do usuário!", "Falha na exclusão do usuário!");
@@ -126,21 +114,15 @@ public class UsuarioBean {
     }
 
     public List<Usuario> searchResults() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("AplicativoPU");
-        UsuarioJpaController ujc = new UsuarioJpaController(emf);
-        return ujc.findUsuarioLike(this.usuario.getUNome());
+        return UsuarioJpaController.getInstance().findUsuarioLike(this.usuario.getUNome());
     }
     
     public List<Usuario> getAllUsers(){
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("AplicativoPU");
-        UsuarioJpaController ujc = new UsuarioJpaController(emf);
-        return ujc.findUsuarioEntities();
+        return UsuarioJpaController.getInstance().findUsuarioEntities();
     }
 
     public String searchNumbers() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("AplicativoPU");
-        UsuarioJpaController ujc = new UsuarioJpaController(emf);
-        return "Total de resultados: " + ujc.findUsuarioLike(this.usuario.getUNome()).size();
+        return "Total de resultados: " + UsuarioJpaController.getInstance().findUsuarioLike(this.usuario.getUNome()).size();
     }
 
 }

@@ -14,6 +14,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
@@ -23,11 +24,21 @@ import javax.persistence.criteria.Root;
  */
 public class UsuarioJpaController implements Serializable {
 
-    public UsuarioJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
-    }
+    private static UsuarioJpaController ujc;
     private EntityManagerFactory emf = null;
 
+    private UsuarioJpaController() {
+        this.emf = Persistence.createEntityManagerFactory("AplicativoPU");
+    }
+    
+    public static UsuarioJpaController getInstance() {
+        if(ujc == null) {
+            ujc = new UsuarioJpaController();
+        }
+        
+        return ujc;
+    }
+    
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
@@ -118,7 +129,7 @@ public class UsuarioJpaController implements Serializable {
             em.close();
         }
     }
-    
+
     public List<Usuario> findUsuarioLike(String parameter) {
         EntityManager em = null;
         try {
@@ -156,5 +167,5 @@ public class UsuarioJpaController implements Serializable {
             em.close();
         }
     }
-
+    
 }

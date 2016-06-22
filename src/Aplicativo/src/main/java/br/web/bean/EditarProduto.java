@@ -126,9 +126,7 @@ public class EditarProduto {
     }
 
     public List<Usuario> adicaoUsuario() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("AplicativoPU");
-        UsuarioJpaController ujc = new UsuarioJpaController(emf);
-        List<Usuario> u_aux = ujc.findUsuarioEntities();
+        List<Usuario> u_aux = UsuarioJpaController.getInstance().findUsuarioEntities();
         List<Usuario> cache_aux = CacheProduto.getInstance().getUsers();
         List<Usuario> resposta = new ArrayList<>();
         for (int i = 0; i < u_aux.size(); i++) {

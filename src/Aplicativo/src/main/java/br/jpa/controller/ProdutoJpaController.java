@@ -8,6 +8,9 @@ package br.jpa.controller;
 import br.jpa.controller.exceptions.NonexistentEntityException;
 import br.jpa.entity.Produto;
 import java.io.Serializable;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
@@ -21,7 +24,7 @@ import javax.persistence.Persistence;
 
 /**
  *
- * @author Matheus Mollon
+ * @author hideki
  */
 public class ProdutoJpaController implements Serializable {
 
@@ -193,5 +196,5 @@ public class ProdutoJpaController implements Serializable {
             em.close();
         }
     }
-
+    
 }

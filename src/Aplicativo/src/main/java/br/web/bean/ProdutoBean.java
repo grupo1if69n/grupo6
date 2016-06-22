@@ -53,13 +53,11 @@ public class ProdutoBean {
 
     public void adicionar() {
         ProdutoJpaController pjc = ProdutoJpaController.getInstance();
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("AplicativoPU");
-        UsuarioJpaController ujc = new UsuarioJpaController(emf);
         List<Usuario> users = new ArrayList<Usuario>();
 
         for (int i = 0; i < selecionados.length; i++) {
-            System.out.println(ujc.findUsuario(selecionados[i]).toString());
-            users.add(ujc.findUsuario(selecionados[i]));
+            System.out.println(UsuarioJpaController.getInstance().findUsuario(selecionados[i]).toString());
+            users.add(UsuarioJpaController.getInstance().findUsuario(selecionados[i]));
         }
 
         Produto p = new Produto();
