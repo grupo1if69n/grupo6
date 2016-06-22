@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
@@ -22,9 +23,19 @@ import javax.persistence.criteria.Root;
  */
 public class ContaJpaController implements Serializable {
 
-    public ContaJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    private static ContaJpaController instance;
+    
+    public ContaJpaController() {
+        this.emf = Persistence.createEntityManagerFactory("AplicativoPU");
     }
+
+    public static ContaJpaController getInstance(){
+        if(instance == null){
+            instance = new ContaJpaController();
+        }
+        return instance;
+    }
+    
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -55,7 +66,7 @@ public class ContaJpaController implements Serializable {
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = conta.getIdconta();
+                Integer id = conta.getCId();
                 if (findConta(id) == null) {
                     throw new NonexistentEntityException("The conta with id " + id + " no longer exists.");
                 }
@@ -76,7 +87,7 @@ public class ContaJpaController implements Serializable {
             Conta conta;
             try {
                 conta = em.getReference(Conta.class, id);
-                conta.getIdconta();
+                conta.getCId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The conta with id " + id + " no longer exists.", enfe);
             }

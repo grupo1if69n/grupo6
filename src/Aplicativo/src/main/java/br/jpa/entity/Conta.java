@@ -28,68 +28,83 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Conta.findAll", query = "SELECT c FROM Conta c"),
-    @NamedQuery(name = "Conta.findByIdconta", query = "SELECT c FROM Conta c WHERE c.idconta = :idconta"),
-    @NamedQuery(name = "Conta.findByNomeconta", query = "SELECT c FROM Conta c WHERE c.nomeconta = :nomeconta"),
-    @NamedQuery(name = "Conta.findByValortotal", query = "SELECT c FROM Conta c WHERE c.valortotal = :valortotal")})
+    @NamedQuery(name = "Conta.findByCId", query = "SELECT c FROM Conta c WHERE c.cId = :cId"),
+    @NamedQuery(name = "Conta.findByCNome", query = "SELECT c FROM Conta c WHERE c.cNome = :cNome"),
+    @NamedQuery(name = "Conta.findByCValor", query = "SELECT c FROM Conta c WHERE c.cValor = :cValor"),
+    @NamedQuery(name = "Conta.findByCGerente", query = "SELECT c FROM Conta c WHERE c.cGerente = :cGerente")})
 public class Conta implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "idconta")
-    private Integer idconta;
+    @Column(name = "c_id")
+    private Integer cId;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 100)
-    @Column(name = "nomeconta")
-    private String nomeconta;
+    @Size(min = 1, max = 30)
+    @Column(name = "c_nome")
+    private String cNome;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "valortotal")
-    private double valortotal;
+    @Column(name = "c_valor")
+    private double cValor;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 30)
+    @Column(name = "c_gerente")
+    private String cGerente;
 
     public Conta() {
     }
 
-    public Conta(Integer idconta) {
-        this.idconta = idconta;
+    public Conta(Integer cId) {
+        this.cId = cId;
     }
 
-    public Conta(Integer idconta, String nomeconta, double valortotal) {
-        this.idconta = idconta;
-        this.nomeconta = nomeconta;
-        this.valortotal = valortotal;
+    public Conta(Integer cId, String cNome, double cValor, String cGerente) {
+        this.cId = cId;
+        this.cNome = cNome;
+        this.cValor = cValor;
+        this.cGerente = cGerente;
     }
 
-    public Integer getIdconta() {
-        return idconta;
+    public Integer getCId() {
+        return cId;
     }
 
-    public void setIdconta(Integer idconta) {
-        this.idconta = idconta;
+    public void setCId(Integer cId) {
+        this.cId = cId;
     }
 
-    public String getNomeconta() {
-        return nomeconta;
+    public String getCNome() {
+        return cNome;
     }
 
-    public void setNomeconta(String nomeconta) {
-        this.nomeconta = nomeconta;
+    public void setCNome(String cNome) {
+        this.cNome = cNome;
     }
 
-    public double getValortotal() {
-        return valortotal;
+    public double getCValor() {
+        return cValor;
     }
 
-    public void setValortotal(double valortotal) {
-        this.valortotal = valortotal;
+    public void setCValor(double cValor) {
+        this.cValor = cValor;
+    }
+
+    public String getCGerente() {
+        return cGerente;
+    }
+
+    public void setCGerente(String cGerente) {
+        this.cGerente = cGerente;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idconta != null ? idconta.hashCode() : 0);
+        hash += (cId != null ? cId.hashCode() : 0);
         return hash;
     }
 
@@ -100,7 +115,7 @@ public class Conta implements Serializable {
             return false;
         }
         Conta other = (Conta) object;
-        if ((this.idconta == null && other.idconta != null) || (this.idconta != null && !this.idconta.equals(other.idconta))) {
+        if ((this.cId == null && other.cId != null) || (this.cId != null && !this.cId.equals(other.cId))) {
             return false;
         }
         return true;
@@ -108,7 +123,7 @@ public class Conta implements Serializable {
 
     @Override
     public String toString() {
-        return "br.jpa.entity.Conta[ idconta=" + idconta + " ]";
+        return "br.jpa.entity.Conta[ cId=" + cId + " ]";
     }
     
 }

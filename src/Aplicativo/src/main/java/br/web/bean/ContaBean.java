@@ -32,7 +32,6 @@ public class ContaBean {
     
     public void criarNovaConta(){
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("AplicativoPU");
-        ContaJpaController ctrl = new ContaJpaController(emf);
     }
     
 }
