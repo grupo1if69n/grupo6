@@ -62,20 +62,24 @@ public class Produto implements Serializable {
     @Basic(optional = false)
     @Column(name = "p_id")
     private Integer pId;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 30)
     @Column(name = "p_nome")
     private String pNome;
+    
     @Basic(optional = false)
     @NotNull
     @Column(name = "p_valor")
     private double pValor;
+    
     @JoinTable(name = "produto_usuario", joinColumns = {
         @JoinColumn(name = "p_id", referencedColumnName = "p_id")}, inverseJoinColumns = {
         @JoinColumn(name = "u_nome", referencedColumnName = "u_nome")})
     @ManyToMany
     private Collection<Usuario> usuarioCollection;
+    
     @JoinColumn(name = "c_id", referencedColumnName = "c_id")
     @ManyToOne(optional = false)
     private Conta cId;

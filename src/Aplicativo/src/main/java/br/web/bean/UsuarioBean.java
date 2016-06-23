@@ -47,6 +47,10 @@ public class UsuarioBean {
         return confirmaSenha;
     }
 
+    public Usuario getUsuarioSession() {
+        return UsuarioJpaController.getInstance().findUsuario(SessionContext.getInstance().getSessionAttribute("uNome").toString());
+    }
+
     public void cadastrarUsuario() {
         if (usuario.getUSenha().equals(confirmaSenha)) {
             try {
@@ -61,10 +65,6 @@ public class UsuarioBean {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Senhas não coincidem!", "Falha no cadastro!");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
-    }
-
-    public Usuario getUsuarioSession() {
-        return UsuarioJpaController.getInstance().findUsuario(SessionContext.getInstance().getSessionAttribute("uNome").toString());
     }
 
     public void atualizarUsuario() {

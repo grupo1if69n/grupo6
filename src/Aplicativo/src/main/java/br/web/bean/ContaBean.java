@@ -57,7 +57,14 @@ public class ContaBean {
         return UsuarioJpaController.getInstance().findUsuario(SessionContext.getInstance().getSessionAttribute("uNome").toString());
     }
 
-    public void criarConta() {
+    public Conta getContaSessionMenosGerente() {
+        Conta contaSession = ContaJpaController.getInstance().findConta((int) SessionContext.getInstance().getSessionAttribute("cId"));
+        UsuarioContaPK usuarioContaPK = new UsuarioContaPK(contaSession.getCGerente(), contaSession.getCId());
+        contaSession.getUsuarioContaCollection().remove(UsuarioContaJpaController.getInstance().findUsuarioConta(usuarioContaPK));
+        return contaSession;
+    }
+
+    public void cadastrarConta() {
         this.conta.setCValor(0.00);
         this.conta.setCGerente(SessionContext.getInstance().getSessionAttribute("uNome").toString());
         ContaJpaController.getInstance().create(conta);
@@ -72,13 +79,6 @@ public class ContaBean {
             FacesContext.getCurrentInstance().addMessage(null, msg);
             System.out.println(ex.toString());
         }
-    }
-
-    public Conta getContaSessionMenosGerente() {
-        Conta contaSession = ContaJpaController.getInstance().findConta((int) SessionContext.getInstance().getSessionAttribute("cId"));
-        UsuarioContaPK usuarioContaPK = new UsuarioContaPK(contaSession.getCGerente(), contaSession.getCId());
-        contaSession.getUsuarioContaCollection().remove(UsuarioContaJpaController.getInstance().findUsuarioConta(usuarioContaPK));
-        return contaSession;
     }
 
     public void atualizarConta() {
