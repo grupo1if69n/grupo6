@@ -81,7 +81,7 @@ public class ContaBean {
         }
     }
 
-    public void atualizarConta() {
+    public void atualizarNomeConta() {
         Conta contaAtualizada = ContaJpaController.getInstance().findConta((int)SessionContext.getInstance().getSessionAttribute("cId"));
         contaAtualizada.setCNome(this.conta.getCNome());
 
