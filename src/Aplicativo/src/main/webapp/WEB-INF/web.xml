@@ -35,6 +35,8 @@
     <filter-mapping>
         <filter-name>LoginFilter</filter-name>
         <url-pattern>/faces/sistema.xhtml</url-pattern>
+        <url-pattern>/faces/atualizacao_usuario.xhtml</url-pattern>
+        <url-pattern>/faces/exclusao_usuario.xhtml</url-pattern>
     </filter-mapping>
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>

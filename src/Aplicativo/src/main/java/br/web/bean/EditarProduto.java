@@ -6,10 +6,8 @@
 package br.web.bean;
 
 import br.jpa.controller.CacheProduto;
-import br.jpa.controller.ContaJpaController;
 import br.jpa.controller.ProdutoJpaController;
 import br.jpa.controller.UsuarioJpaController;
-import br.jpa.entity.Conta;
 import br.jpa.entity.Produto;
 import br.jpa.entity.Usuario;
 import br.web.utils.SessionContext;
@@ -21,8 +19,6 @@ import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 /**
  *

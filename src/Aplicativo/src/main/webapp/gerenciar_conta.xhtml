@@ -10,6 +10,7 @@
     </h:head>
     <h:body>  
         <c:set var="conta" value="#{contaBean.contaSessionMenosGerente}" scope="request" />
+        
         <h:form>
             <h:panelGrid columns="3">      
                 <h:commandButton action="#{navigationBean.redirectAtualizacaoConta()}" 
