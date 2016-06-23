@@ -6,8 +6,9 @@
 package br.web.bean;
 
 import br.jpa.controller.CacheProduto;
+import br.jpa.controller.ContaJpaController;
 import br.jpa.controller.ProdutoJpaController;
-import br.jpa.controller.UsuarioJpaController;
+import br.jpa.entity.Conta;
 import br.jpa.entity.Produto;
 import br.jpa.entity.Usuario;
 import br.web.utils.SessionContext;
@@ -19,6 +20,7 @@ import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+
 
 /**
  *
@@ -60,12 +62,13 @@ public class EditarProduto {
     }
 
     public void edit() {
-        System.out.println("EDIT");
         Produto p = new Produto();
         p.setPId(this.produto.getPId());
         p.setPNome(this.produto.getPNome());
         p.setPValor(this.produto.getPValor());
+        p.setCId(this.produto.getCId());
         p.setUsuarioCollection(CacheProduto.getInstance().getUsers());
+        p.setCId(recuperarConta());
         System.out.println(p.toString());
         for (Usuario u : CacheProduto.getInstance().getUsers()) {
             System.out.println(u.toString());
@@ -77,7 +80,7 @@ public class EditarProduto {
         } finally {
             CacheProduto.getInstance().liberar();
             try {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("/Aplicativo/faces/produto.xhtml");
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/Aplicativo/faces/gerenciar_conta.xhtml");
             } catch (IOException ex) {
                 Logger.getLogger(EditarProduto.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -98,7 +101,7 @@ public class EditarProduto {
             this.produto = pjc.findProduto(id);
         } catch (NullPointerException e) {
             try {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("/Aplicativo/faces/produto.xhtml");
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/Aplicativo/faces/gerenciar_conta.xhtml");
             } catch (IOException ex) {
                 Logger.getLogger(EditarProduto.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -113,7 +116,7 @@ public class EditarProduto {
         try {
             CacheProduto.getInstance().liberar();
             this.produto = new Produto();
-            FacesContext.getCurrentInstance().getExternalContext().redirect("/Aplicativo/faces/produto.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/Aplicativo/faces/gerenciar_conta.xhtml");
         } catch (IOException ex) {
             Logger.getLogger(EditarProduto.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -124,7 +127,8 @@ public class EditarProduto {
     }
 
     public List<Usuario> adicaoUsuario() {
-        List<Usuario> u_aux = UsuarioJpaController.getInstance().findUsuarioEntities();
+        ProdutoJpaController pjc = ProdutoJpaController.getInstance();
+        List<Usuario> u_aux = pjc.getAllUsersFromAccount(recuperarConta().getCId());
         List<Usuario> cache_aux = CacheProduto.getInstance().getUsers();
         List<Usuario> resposta = new ArrayList<>();
         for (int i = 0; i < u_aux.size(); i++) {
@@ -136,6 +140,9 @@ public class EditarProduto {
         return resposta;
     }
     
-  
+      private Conta recuperarConta() {
+        Conta contaSession = ContaJpaController.getInstance().findConta((int) SessionContext.getInstance().getSessionAttribute("cId"));
+        return contaSession;
+    }
 
 }

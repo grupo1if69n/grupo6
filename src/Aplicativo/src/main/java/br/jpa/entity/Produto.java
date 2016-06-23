@@ -5,6 +5,7 @@
  */
 package br.jpa.entity;
 
+import br.jpa.controller.ProdutoJpaController;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
@@ -46,12 +47,11 @@ import javax.xml.bind.annotation.XmlTransient;
             query = "select * from usuario u, produto_usuario pu where (u.u_nome = pu.u_nome) and pu.p_id=?;",
             resultClass = Usuario.class
     ),
-      @NamedNativeQuery(
+    @NamedNativeQuery(
             name = "getAllUsersFromAccount",
             query = "select * from usuario u, usuario_conta uc where (u.u_nome = uc.u_nome) and uc.c_id=?;",
             resultClass = Usuario.class
     )
-        
 
 })
 public class Produto implements Serializable {
@@ -117,6 +117,10 @@ public class Produto implements Serializable {
         this.pValor = pValor;
     }
 
+    public int getQtdUsersProduct(int id) {
+        return ProdutoJpaController.getInstance().getAllUsersFromProduct(id).size();
+    }
+
     @XmlTransient
     public Collection<Usuario> getUsuarioCollection() {
         return usuarioCollection;
@@ -158,5 +162,5 @@ public class Produto implements Serializable {
     public String toString() {
         return "br.jpa.entity.Produto[ pId=" + pId + " ]";
     }
-    
+
 }

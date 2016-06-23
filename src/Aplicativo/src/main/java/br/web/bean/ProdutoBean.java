@@ -5,10 +5,11 @@
  */
 package br.web.bean;
 
-
+import br.jpa.controller.ContaJpaController;
 import br.jpa.controller.ProdutoJpaController;
 import br.jpa.controller.UsuarioJpaController;
 import br.jpa.controller.exceptions.NonexistentEntityException;
+import br.jpa.entity.Conta;
 import br.jpa.entity.Produto;
 import br.jpa.entity.Usuario;
 import br.web.utils.SessionContext;
@@ -51,24 +52,26 @@ public class ProdutoBean {
 
     public void adicionar() {
         ProdutoJpaController pjc = ProdutoJpaController.getInstance();
+        UsuarioJpaController ujc = UsuarioJpaController.getInstance();
         List<Usuario> users = new ArrayList<Usuario>();
 
         for (int i = 0; i < selecionados.length; i++) {
-            System.out.println(UsuarioJpaController.getInstance().findUsuario(selecionados[i]).toString());
-            users.add(UsuarioJpaController.getInstance().findUsuario(selecionados[i]));
+            System.out.println(ujc.findUsuario(selecionados[i]).toString());
+            users.add(ujc.findUsuario(selecionados[i]));
         }
 
         Produto p = new Produto();
         p.setPId(pjc.findProdutoEntities().size() + 1);
         p.setPNome(produto);
         p.setPValor(preco);
+        p.setCId(recuperarConta());
         for (Usuario u : users) {
             System.out.println(u.toString());
         }
         p.setUsuarioCollection(users);
         pjc.create(p);
         System.out.println("done");
-
+        clean();
     }
 
     public void remove(Produto produto) {
@@ -81,16 +84,16 @@ public class ProdutoBean {
     }
 
     public void clean() {
-        this.setId(-1);
+
+        this.id = -1;
         this.produto = "";
         this.preco = 0.0;
+        this.selecionados = new String[ProdutoJpaController.getInstance().findProdutoEntities().size()];
     }
-
-  
 
     public void loadData(Produto prod) {
         int produto_id = prod.getPId();
-        SessionContext.getInstance().setSessionAttribute("produto_edit",produto_id);
+        SessionContext.getInstance().setSessionAttribute("produto_edit", produto_id);
         try {
             FacesContext.getCurrentInstance().getExternalContext().redirect("/Aplicativo/faces/editar_produto.xhtml");
         } catch (IOException ex) {
@@ -98,10 +101,6 @@ public class ProdutoBean {
         }
         System.out.println("loading..." + prod.toString());
 
-    }
-
-    public List<Produto> getAllProdutos() {
-        return ProdutoJpaController.getInstance().findProdutoEntities();
     }
 
     public int getId() {
@@ -129,19 +128,27 @@ public class ProdutoBean {
     }
 
     public void getUsers_por_produto(int id) {
-            ProdutoJpaController pjc = ProdutoJpaController.getInstance();
-            this.users_por_produto = pjc.getAllUsersFromProduct(id);
-            
+        ProdutoJpaController pjc = ProdutoJpaController.getInstance();
+        this.users_por_produto = pjc.getAllUsersFromProduct(id);
+
+    }
+
+    public List<Usuario> getTodosUsuariosNaConta() {
+        ProdutoJpaController pjc = ProdutoJpaController.getInstance();
+        return pjc.getAllUsersFromAccount(recuperarConta().getCId());
     }
 
     public List<Usuario> getUsers_por_produto() {
         return users_por_produto;
     }
-        
 
     public void limparDetalhes() {
         users_por_produto = new ArrayList<>();
     }
 
+    private Conta recuperarConta() {
+        Conta contaSession = ContaJpaController.getInstance().findConta((int) SessionContext.getInstance().getSessionAttribute("cId"));
+        return contaSession;
+    }
 
 }
