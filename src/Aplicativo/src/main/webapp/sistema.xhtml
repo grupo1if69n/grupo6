@@ -12,7 +12,7 @@
     </h:head>
     <h:body>
         <p:growl autoUpdate="true" /> 
-        
+
         <c:set var="usuario" value="#{usuarioBean.usuarioSession}" scope="request" />
 
         <p:toolbar>  
@@ -44,12 +44,23 @@
                         <span class="ui-icon ui-icon-grip-dotted-vertical" />
                     </span>
 
+                    <p:outputLabel for="cMedia" 
+                                   value="Média Consumo: " />
+                    <h:outputText id="cMedia" value="#{usuario.getMediaUsuario(usuario.UNome)}">
+                        <f:convertNumber type="currency" currencySymbol="R$" />
+                    </h:outputText>
+
+
+                    <span class="ui-separator">
+                        <span class="ui-icon ui-icon-grip-dotted-vertical" />
+                    </span> 
+
                     <p:commandButton action="#{loginBean.logout()}"
                                      value="Sair" />                    
                 </h:form>
             </f:facet>            
         </p:toolbar>
-        
+
         <br />
 
         <p:panel id="panelContas"
@@ -72,9 +83,9 @@
                         <p:resetInput target=":panelContas" />
                     </p:commandButton>
                 </h:panelGrid>
-                
+
                 <br />
-                
+
                 <p:dataTable id="contas"
                              value="#{usuario.usuarioContaCollection}"
                              emptyMessage="Nenhuma conta encontrada."

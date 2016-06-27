@@ -5,6 +5,8 @@
  */
 package br.jpa.entity;
 
+import br.calc.CalculoMedia;
+import br.jpa.controller.UsuarioJpaController;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
@@ -123,6 +125,13 @@ public class Usuario implements Serializable {
         int hash = 0;
         hash += (uNome != null ? uNome.hashCode() : 0);
         return hash;
+    }
+    
+    public double getMediaUsuario(String nome) {
+        UsuarioJpaController ujc = UsuarioJpaController.getInstance();
+        Usuario u = ujc.findUsuario(nome);
+        return CalculoMedia.calculoEstimativaTotal(u.getUsuarioContaCollection());
+
     }
 
     @Override
