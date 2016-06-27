@@ -47,6 +47,8 @@ public class VisualizarContaFilter implements Filter {
 
             if (!uc.getConta().getCGerente().equals(uNome)) {
                 chain.doFilter(request, response);
+            } else if (uc.getConta().getCGerente().equals(uNome) && !uc.getConta().getCAberto()) {
+                chain.doFilter(request, response);
             } else {
                 ((HttpServletResponse) response).sendRedirect(((HttpServletRequest) request).getContextPath() + "/faces/sistema.xhtml");
             }

@@ -52,9 +52,5 @@ public class SearchBean {
         
         return results;
     }
-
-    public String searchNumbers() {
-        return "Total de resultados: " + results.size();
-    }
     
 }

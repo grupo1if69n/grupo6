@@ -32,7 +32,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
     @NamedQuery(name = "Usuario.findAllUNomeLike", query = "SELECT u FROM Usuario u WHERE u.uNome like :uNome"),
-    @NamedQuery(name = "Usuario.findAllUNomeLikeCount", query = "SELECT count(u) FROM Usuario u WHERE u.uNome like :uNome"),
     @NamedQuery(name = "Usuario.findByUNome", query = "SELECT u FROM Usuario u WHERE u.uNome = :uNome"),
     @NamedQuery(name = "Usuario.findByUSenha", query = "SELECT u FROM Usuario u WHERE u.uSenha = :uSenha"),
     @NamedQuery(name = "Usuario.findByUCelular", query = "SELECT u FROM Usuario u WHERE u.uCelular = :uCelular")})
@@ -57,12 +56,12 @@ public class Usuario implements Serializable {
     @Size(min = 1, max = 20)
     @Column(name = "u_celular")
     private String uCelular;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
-    private Collection<UsuarioConta> usuarioContaCollection;
-
+    
     @ManyToMany(mappedBy = "usuarioCollection")
     private Collection<Produto> produtoCollection;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
+    private Collection<UsuarioConta> usuarioContaCollection;
 
     public Usuario() {
     }
@@ -102,15 +101,6 @@ public class Usuario implements Serializable {
     }
 
     @XmlTransient
-    public Collection<UsuarioConta> getUsuarioContaCollection() {
-        return usuarioContaCollection;
-    }
-
-    public void setUsuarioContaCollection(Collection<UsuarioConta> usuarioContaCollection) {
-        this.usuarioContaCollection = usuarioContaCollection;
-    }
-
-    @XmlTransient
     public Collection<Produto> getProdutoCollection() {
         return produtoCollection;
     }
@@ -118,7 +108,15 @@ public class Usuario implements Serializable {
     public void setProdutoCollection(Collection<Produto> produtoCollection) {
         this.produtoCollection = produtoCollection;
     }
-    
+
+    @XmlTransient
+    public Collection<UsuarioConta> getUsuarioContaCollection() {
+        return usuarioContaCollection;
+    }
+
+    public void setUsuarioContaCollection(Collection<UsuarioConta> usuarioContaCollection) {
+        this.usuarioContaCollection = usuarioContaCollection;
+    }
 
     @Override
     public int hashCode() {

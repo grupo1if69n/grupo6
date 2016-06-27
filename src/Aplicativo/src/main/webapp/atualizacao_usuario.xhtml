@@ -3,46 +3,47 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Atualizar Usuário</title>
     </h:head>
     <h:body>
-        <h:form>
-            <h3>Atualizar dados de usuário</h3>
-            <h:panelGrid columns="1">
-                <h:panelGrid columns="2">
-                    <h:outputLabel for="unome" 
-                                   value="Nome de usuário: " />
-                    <h:inputText id="unome" 
-                                 required="true" 
-                                 value="#{usuarioBean.usuarioSession.UNome}" 
-                                 readonly="#{facesContext.renderResponse}" />
+        <p:growl autoUpdate="true" /> 
+        
+        <p:panel header="Atualizar dados de usuário">
+            <h:form>
+                <h:panelGrid columns="1">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel for="unome" 
+                                       value="Nome de usuário: " />
+                        <p:inputText id="unome" 
+                                     value="#{usuarioBean.usuarioSession.UNome}" 
+                                     readonly="#{facesContext.renderResponse}" />
 
-                    <h:outputLabel for="ucelular" 
-                                   value="Número de celular: " />
-                    <h:inputText id="ucelular" 
-                                 required="true" 
-                                 value="#{usuarioBean.usuario.UCelular}" 
-                                 requiredMessage="Informe um número de celular."
-                                 validatorMessage="Número de celular inválido."
-                                 pt:placeholder="Ex.: 01 234567890"
-                                 pt:autofocus="true">
-                        <f:validateRegex pattern="[0-9]{2} [0-9]{8,9}" />
-                    </h:inputText>
-                </h:panelGrid>
+                        <p:outputLabel for="ucelular" 
+                                       value="Número de celular: " />
+                        <p:inputText id="ucelular" 
+                                     required="true" 
+                                     value="#{usuarioBean.usuario.UCelular}" 
+                                     requiredMessage="Informe um número de celular."
+                                     validatorMessage="Número de celular inválido."
+                                     pt:placeholder="Ex.: 01 234567890"
+                                     pt:autofocus="true">
+                            <f:validateRegex pattern="[0-9]{2} [0-9]{8,9}" />
+                        </p:inputText>
+                    </h:panelGrid>
 
-                <h:panelGrid columns="2" style="float: right">
-                    <h:commandButton action="#{usuarioBean.atualizarUsuario()}" 
-                                     value="Confirmar" />
-                    <h:commandButton immediate="true" 
-                                     action="#{navigationBean.redirectSistema()}" 
-                                     value="Cancelar" />
+                    <h:panelGrid columns="2" style="float: right">
+                        <p:commandButton action="#{usuarioBean.atualizarUsuario()}" 
+                                         value="Confirmar" />
+                        <p:commandButton immediate="true" 
+                                         action="#{navigationBean.redirectSistema()}" 
+                                         value="Cancelar" />
+                    </h:panelGrid>
                 </h:panelGrid>
-            </h:panelGrid>
-            <h:messages errorStyle="color: red" 
-                        infoStyle="color: green" />
-        </h:form>
+            </h:form>
+        </p:panel>
     </h:body>
 </html>
 

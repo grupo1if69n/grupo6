@@ -45,8 +45,10 @@ public class GerenciarContaFilter implements Filter {
             UsuarioContaPK usuarioContaPK = new UsuarioContaPK(uNome, cId);
             UsuarioConta uc = UsuarioContaJpaController.getInstance().findUsuarioConta(usuarioContaPK);
 
-            if (uc.getConta().getCGerente().equals(uNome)) {
+            if (uc.getConta().getCGerente().equals(uNome) && uc.getConta().getCAberto()) {
                 chain.doFilter(request, response);
+            } else if (uc.getConta().getCGerente().equals(uNome) && !uc.getConta().getCAberto()) {
+                 ((HttpServletResponse) response).sendRedirect(((HttpServletRequest) request).getContextPath() + "/faces/visualizar_conta.xhtml");
             } else {
                 ((HttpServletResponse) response).sendRedirect(((HttpServletRequest) request).getContextPath() + "/faces/sistema.xhtml");
             }
