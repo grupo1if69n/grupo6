@@ -13,8 +13,22 @@ CREATE TABLE conta(
 	c_nome 		VARCHAR(30) 	NOT NULL,
 	c_valor		FLOAT		NOT NULL,
 	c_gerente	VARCHAR(30)	NOT NULL,
+	c_taxa_servico	INTEGER		NOT NULL,
+	c_aberto	BOOLEAN		NOT NULL,
 	CONSTRAINT c_pk 
 		PRIMARY KEY(c_id)
+);
+
+--DROP TABLE produto;
+CREATE TABLE produto(
+	p_id 		SERIAL		NOT NULL,
+	p_nome		VARCHAR(30)	NOT NULL,
+	p_valor		FLOAT		NOT NULL,
+	c_id		INTEGER		NOT NULL,
+	CONSTRAINT p_pk
+		PRIMARY KEY(p_id),
+	CONSTRAINT c_id_fk
+		FOREIGN KEY (c_id) REFERENCES conta(c_id)
 );
 
 --DROP TABLE usuario_conta;
@@ -30,17 +44,7 @@ CREATE TABLE usuario_conta(
 		FOREIGN KEY (c_id) REFERENCES conta(c_id)
 );
 
-CREATE TABLE produto(
-	p_id 		SERIAL		NOT NULL,
-	p_nome		VARCHAR(30)	NOT NULL,
-	p_valor		FLOAT		NOT NULL,
-	c_id		INTEGER		NOT NULL,
-	CONSTRAINT p_pk
-		PRIMARY KEY(p_id),
-	CONSTRAINT c_id_fk
-		FOREIGN KEY (c_id) REFERENCES conta(c_id)
-);
-
+--DROP TABLE produto_usuario;
 CREATE TABLE produto_usuario(
 	p_id		INTEGER		NOT NULL,
 	u_nome		VARCHAR(30)	NOT NULL,
