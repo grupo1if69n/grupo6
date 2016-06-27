@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author hideki
+ * @author Felipe
  */
 @Entity
 @Table(name = "conta")
@@ -34,8 +34,11 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Conta.findAll", query = "SELECT c FROM Conta c"),
     @NamedQuery(name = "Conta.findByCId", query = "SELECT c FROM Conta c WHERE c.cId = :cId"),
     @NamedQuery(name = "Conta.findByCNome", query = "SELECT c FROM Conta c WHERE c.cNome = :cNome"),
+    @NamedQuery(name = "Conta.findByCNome2", query = "SELECT c FROM Conta c WHERE c.cNome = :cNome AND c.cValor != 0.0"),
     @NamedQuery(name = "Conta.findByCValor", query = "SELECT c FROM Conta c WHERE c.cValor = :cValor"),
-    @NamedQuery(name = "Conta.findByCGerente", query = "SELECT c FROM Conta c WHERE c.cGerente = :cGerente")})
+    @NamedQuery(name = "Conta.findByCGerente", query = "SELECT c FROM Conta c WHERE c.cGerente = :cGerente"),
+    @NamedQuery(name = "Conta.findByCTaxaServico", query = "SELECT c FROM Conta c WHERE c.cTaxaServico = :cTaxaServico"),
+    @NamedQuery(name = "Conta.findByCAberto", query = "SELECT c FROM Conta c WHERE c.cAberto = :cAberto")})
 public class Conta implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -62,11 +65,21 @@ public class Conta implements Serializable {
     @Column(name = "c_gerente")
     private String cGerente;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "conta")
-    private Collection<UsuarioConta> usuarioContaCollection;
-
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "c_taxa_servico")
+    private int cTaxaServico;
+    
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "c_aberto")
+    private boolean cAberto;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cId")
     private Collection<Produto> produtoCollection;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "conta")
+    private Collection<UsuarioConta> usuarioContaCollection;
 
     public Conta() {
     }
@@ -75,11 +88,13 @@ public class Conta implements Serializable {
         this.cId = cId;
     }
 
-    public Conta(Integer cId, String cNome, double cValor, String cGerente) {
+    public Conta(Integer cId, String cNome, double cValor, String cGerente, int cTaxaServico, boolean cAberto) {
         this.cId = cId;
         this.cNome = cNome;
         this.cValor = cValor;
         this.cGerente = cGerente;
+        this.cTaxaServico = cTaxaServico;
+        this.cAberto = cAberto;
     }
 
     public Integer getCId() {
@@ -114,13 +129,20 @@ public class Conta implements Serializable {
         this.cGerente = cGerente;
     }
 
-    @XmlTransient
-    public Collection<UsuarioConta> getUsuarioContaCollection() {
-        return usuarioContaCollection;
+    public int getCTaxaServico() {
+        return cTaxaServico;
     }
 
-    public void setUsuarioContaCollection(Collection<UsuarioConta> usuarioContaCollection) {
-        this.usuarioContaCollection = usuarioContaCollection;
+    public void setCTaxaServico(int cTaxaServico) {
+        this.cTaxaServico = cTaxaServico;
+    }
+
+    public boolean getCAberto() {
+        return cAberto;
+    }
+
+    public void setCAberto(boolean cAberto) {
+        this.cAberto = cAberto;
     }
 
     @XmlTransient
@@ -130,6 +152,15 @@ public class Conta implements Serializable {
 
     public void setProdutoCollection(Collection<Produto> produtoCollection) {
         this.produtoCollection = produtoCollection;
+    }
+
+    @XmlTransient
+    public Collection<UsuarioConta> getUsuarioContaCollection() {
+        return usuarioContaCollection;
+    }
+
+    public void setUsuarioContaCollection(Collection<UsuarioConta> usuarioContaCollection) {
+        this.usuarioContaCollection = usuarioContaCollection;
     }
 
     @Override

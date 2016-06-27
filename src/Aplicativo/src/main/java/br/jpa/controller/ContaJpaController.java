@@ -13,10 +13,10 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import br.jpa.entity.UsuarioConta;
+import br.jpa.entity.Produto;
 import java.util.ArrayList;
 import java.util.Collection;
-import br.jpa.entity.Produto;
+import br.jpa.entity.UsuarioConta;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -24,12 +24,11 @@ import javax.persistence.Persistence;
 
 /**
  *
- * @author Matheus Mollon
+ * @author Felipe
  */
 public class ContaJpaController implements Serializable {
 
     private static ContaJpaController cjc;
-
     private EntityManagerFactory emf = null;
 
     private ContaJpaController() {
@@ -48,38 +47,29 @@ public class ContaJpaController implements Serializable {
     }
 
     public void create(Conta conta) {
-        if (conta.getUsuarioContaCollection() == null) {
-            conta.setUsuarioContaCollection(new ArrayList<UsuarioConta>());
-        }
         if (conta.getProdutoCollection() == null) {
             conta.setProdutoCollection(new ArrayList<Produto>());
+        }
+        if (conta.getUsuarioContaCollection() == null) {
+            conta.setUsuarioContaCollection(new ArrayList<UsuarioConta>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Collection<UsuarioConta> attachedUsuarioContaCollection = new ArrayList<UsuarioConta>();
-            for (UsuarioConta usuarioContaCollectionUsuarioContaToAttach : conta.getUsuarioContaCollection()) {
-                usuarioContaCollectionUsuarioContaToAttach = em.getReference(usuarioContaCollectionUsuarioContaToAttach.getClass(), usuarioContaCollectionUsuarioContaToAttach.getUsuarioContaPK());
-                attachedUsuarioContaCollection.add(usuarioContaCollectionUsuarioContaToAttach);
-            }
-            conta.setUsuarioContaCollection(attachedUsuarioContaCollection);
             Collection<Produto> attachedProdutoCollection = new ArrayList<Produto>();
             for (Produto produtoCollectionProdutoToAttach : conta.getProdutoCollection()) {
                 produtoCollectionProdutoToAttach = em.getReference(produtoCollectionProdutoToAttach.getClass(), produtoCollectionProdutoToAttach.getPId());
                 attachedProdutoCollection.add(produtoCollectionProdutoToAttach);
             }
             conta.setProdutoCollection(attachedProdutoCollection);
-            em.persist(conta);
-            for (UsuarioConta usuarioContaCollectionUsuarioConta : conta.getUsuarioContaCollection()) {
-                Conta oldContaOfUsuarioContaCollectionUsuarioConta = usuarioContaCollectionUsuarioConta.getConta();
-                usuarioContaCollectionUsuarioConta.setConta(conta);
-                usuarioContaCollectionUsuarioConta = em.merge(usuarioContaCollectionUsuarioConta);
-                if (oldContaOfUsuarioContaCollectionUsuarioConta != null) {
-                    oldContaOfUsuarioContaCollectionUsuarioConta.getUsuarioContaCollection().remove(usuarioContaCollectionUsuarioConta);
-                    oldContaOfUsuarioContaCollectionUsuarioConta = em.merge(oldContaOfUsuarioContaCollectionUsuarioConta);
-                }
+            Collection<UsuarioConta> attachedUsuarioContaCollection = new ArrayList<UsuarioConta>();
+            for (UsuarioConta usuarioContaCollectionUsuarioContaToAttach : conta.getUsuarioContaCollection()) {
+                usuarioContaCollectionUsuarioContaToAttach = em.getReference(usuarioContaCollectionUsuarioContaToAttach.getClass(), usuarioContaCollectionUsuarioContaToAttach.getUsuarioContaPK());
+                attachedUsuarioContaCollection.add(usuarioContaCollectionUsuarioContaToAttach);
             }
+            conta.setUsuarioContaCollection(attachedUsuarioContaCollection);
+            em.persist(conta);
             for (Produto produtoCollectionProduto : conta.getProdutoCollection()) {
                 Conta oldCIdOfProdutoCollectionProduto = produtoCollectionProduto.getCId();
                 produtoCollectionProduto.setCId(conta);
@@ -87,6 +77,15 @@ public class ContaJpaController implements Serializable {
                 if (oldCIdOfProdutoCollectionProduto != null) {
                     oldCIdOfProdutoCollectionProduto.getProdutoCollection().remove(produtoCollectionProduto);
                     oldCIdOfProdutoCollectionProduto = em.merge(oldCIdOfProdutoCollectionProduto);
+                }
+            }
+            for (UsuarioConta usuarioContaCollectionUsuarioConta : conta.getUsuarioContaCollection()) {
+                Conta oldContaOfUsuarioContaCollectionUsuarioConta = usuarioContaCollectionUsuarioConta.getConta();
+                usuarioContaCollectionUsuarioConta.setConta(conta);
+                usuarioContaCollectionUsuarioConta = em.merge(usuarioContaCollectionUsuarioConta);
+                if (oldContaOfUsuarioContaCollectionUsuarioConta != null) {
+                    oldContaOfUsuarioContaCollectionUsuarioConta.getUsuarioContaCollection().remove(usuarioContaCollectionUsuarioConta);
+                    oldContaOfUsuarioContaCollectionUsuarioConta = em.merge(oldContaOfUsuarioContaCollectionUsuarioConta);
                 }
             }
             em.getTransaction().commit();
@@ -103,19 +102,11 @@ public class ContaJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Conta persistentConta = em.find(Conta.class, conta.getCId());
-            Collection<UsuarioConta> usuarioContaCollectionOld = persistentConta.getUsuarioContaCollection();
-            Collection<UsuarioConta> usuarioContaCollectionNew = conta.getUsuarioContaCollection();
             Collection<Produto> produtoCollectionOld = persistentConta.getProdutoCollection();
             Collection<Produto> produtoCollectionNew = conta.getProdutoCollection();
+            Collection<UsuarioConta> usuarioContaCollectionOld = persistentConta.getUsuarioContaCollection();
+            Collection<UsuarioConta> usuarioContaCollectionNew = conta.getUsuarioContaCollection();
             List<String> illegalOrphanMessages = null;
-            for (UsuarioConta usuarioContaCollectionOldUsuarioConta : usuarioContaCollectionOld) {
-                if (!usuarioContaCollectionNew.contains(usuarioContaCollectionOldUsuarioConta)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain UsuarioConta " + usuarioContaCollectionOldUsuarioConta + " since its conta field is not nullable.");
-                }
-            }
             for (Produto produtoCollectionOldProduto : produtoCollectionOld) {
                 if (!produtoCollectionNew.contains(produtoCollectionOldProduto)) {
                     if (illegalOrphanMessages == null) {
@@ -124,16 +115,17 @@ public class ContaJpaController implements Serializable {
                     illegalOrphanMessages.add("You must retain Produto " + produtoCollectionOldProduto + " since its CId field is not nullable.");
                 }
             }
+            for (UsuarioConta usuarioContaCollectionOldUsuarioConta : usuarioContaCollectionOld) {
+                if (!usuarioContaCollectionNew.contains(usuarioContaCollectionOldUsuarioConta)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain UsuarioConta " + usuarioContaCollectionOldUsuarioConta + " since its conta field is not nullable.");
+                }
+            }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Collection<UsuarioConta> attachedUsuarioContaCollectionNew = new ArrayList<UsuarioConta>();
-            for (UsuarioConta usuarioContaCollectionNewUsuarioContaToAttach : usuarioContaCollectionNew) {
-                usuarioContaCollectionNewUsuarioContaToAttach = em.getReference(usuarioContaCollectionNewUsuarioContaToAttach.getClass(), usuarioContaCollectionNewUsuarioContaToAttach.getUsuarioContaPK());
-                attachedUsuarioContaCollectionNew.add(usuarioContaCollectionNewUsuarioContaToAttach);
-            }
-            usuarioContaCollectionNew = attachedUsuarioContaCollectionNew;
-            conta.setUsuarioContaCollection(usuarioContaCollectionNew);
             Collection<Produto> attachedProdutoCollectionNew = new ArrayList<Produto>();
             for (Produto produtoCollectionNewProdutoToAttach : produtoCollectionNew) {
                 produtoCollectionNewProdutoToAttach = em.getReference(produtoCollectionNewProdutoToAttach.getClass(), produtoCollectionNewProdutoToAttach.getPId());
@@ -141,18 +133,14 @@ public class ContaJpaController implements Serializable {
             }
             produtoCollectionNew = attachedProdutoCollectionNew;
             conta.setProdutoCollection(produtoCollectionNew);
-            conta = em.merge(conta);
-            for (UsuarioConta usuarioContaCollectionNewUsuarioConta : usuarioContaCollectionNew) {
-                if (!usuarioContaCollectionOld.contains(usuarioContaCollectionNewUsuarioConta)) {
-                    Conta oldContaOfUsuarioContaCollectionNewUsuarioConta = usuarioContaCollectionNewUsuarioConta.getConta();
-                    usuarioContaCollectionNewUsuarioConta.setConta(conta);
-                    usuarioContaCollectionNewUsuarioConta = em.merge(usuarioContaCollectionNewUsuarioConta);
-                    if (oldContaOfUsuarioContaCollectionNewUsuarioConta != null && !oldContaOfUsuarioContaCollectionNewUsuarioConta.equals(conta)) {
-                        oldContaOfUsuarioContaCollectionNewUsuarioConta.getUsuarioContaCollection().remove(usuarioContaCollectionNewUsuarioConta);
-                        oldContaOfUsuarioContaCollectionNewUsuarioConta = em.merge(oldContaOfUsuarioContaCollectionNewUsuarioConta);
-                    }
-                }
+            Collection<UsuarioConta> attachedUsuarioContaCollectionNew = new ArrayList<UsuarioConta>();
+            for (UsuarioConta usuarioContaCollectionNewUsuarioContaToAttach : usuarioContaCollectionNew) {
+                usuarioContaCollectionNewUsuarioContaToAttach = em.getReference(usuarioContaCollectionNewUsuarioContaToAttach.getClass(), usuarioContaCollectionNewUsuarioContaToAttach.getUsuarioContaPK());
+                attachedUsuarioContaCollectionNew.add(usuarioContaCollectionNewUsuarioContaToAttach);
             }
+            usuarioContaCollectionNew = attachedUsuarioContaCollectionNew;
+            conta.setUsuarioContaCollection(usuarioContaCollectionNew);
+            conta = em.merge(conta);
             for (Produto produtoCollectionNewProduto : produtoCollectionNew) {
                 if (!produtoCollectionOld.contains(produtoCollectionNewProduto)) {
                     Conta oldCIdOfProdutoCollectionNewProduto = produtoCollectionNewProduto.getCId();
@@ -161,6 +149,17 @@ public class ContaJpaController implements Serializable {
                     if (oldCIdOfProdutoCollectionNewProduto != null && !oldCIdOfProdutoCollectionNewProduto.equals(conta)) {
                         oldCIdOfProdutoCollectionNewProduto.getProdutoCollection().remove(produtoCollectionNewProduto);
                         oldCIdOfProdutoCollectionNewProduto = em.merge(oldCIdOfProdutoCollectionNewProduto);
+                    }
+                }
+            }
+            for (UsuarioConta usuarioContaCollectionNewUsuarioConta : usuarioContaCollectionNew) {
+                if (!usuarioContaCollectionOld.contains(usuarioContaCollectionNewUsuarioConta)) {
+                    Conta oldContaOfUsuarioContaCollectionNewUsuarioConta = usuarioContaCollectionNewUsuarioConta.getConta();
+                    usuarioContaCollectionNewUsuarioConta.setConta(conta);
+                    usuarioContaCollectionNewUsuarioConta = em.merge(usuarioContaCollectionNewUsuarioConta);
+                    if (oldContaOfUsuarioContaCollectionNewUsuarioConta != null && !oldContaOfUsuarioContaCollectionNewUsuarioConta.equals(conta)) {
+                        oldContaOfUsuarioContaCollectionNewUsuarioConta.getUsuarioContaCollection().remove(usuarioContaCollectionNewUsuarioConta);
+                        oldContaOfUsuarioContaCollectionNewUsuarioConta = em.merge(oldContaOfUsuarioContaCollectionNewUsuarioConta);
                     }
                 }
             }
@@ -194,19 +193,19 @@ public class ContaJpaController implements Serializable {
                 throw new NonexistentEntityException("The conta with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<UsuarioConta> usuarioContaCollectionOrphanCheck = conta.getUsuarioContaCollection();
-            for (UsuarioConta usuarioContaCollectionOrphanCheckUsuarioConta : usuarioContaCollectionOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Conta (" + conta + ") cannot be destroyed since the UsuarioConta " + usuarioContaCollectionOrphanCheckUsuarioConta + " in its usuarioContaCollection field has a non-nullable conta field.");
-            }
             Collection<Produto> produtoCollectionOrphanCheck = conta.getProdutoCollection();
             for (Produto produtoCollectionOrphanCheckProduto : produtoCollectionOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("This Conta (" + conta + ") cannot be destroyed since the Produto " + produtoCollectionOrphanCheckProduto + " in its produtoCollection field has a non-nullable CId field.");
+            }
+            Collection<UsuarioConta> usuarioContaCollectionOrphanCheck = conta.getUsuarioContaCollection();
+            for (UsuarioConta usuarioContaCollectionOrphanCheckUsuarioConta : usuarioContaCollectionOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Conta (" + conta + ") cannot be destroyed since the UsuarioConta " + usuarioContaCollectionOrphanCheckUsuarioConta + " in its usuarioContaCollection field has a non-nullable conta field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
@@ -244,6 +243,22 @@ public class ContaJpaController implements Serializable {
         }
     }
 
+    public List<Conta> findContaPorNome(String parameter) {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            Query query = em.createNamedQuery("Conta.findByCNome2");
+            query.setParameter("cNome", parameter);
+            return query.getResultList();
+        } catch (Exception ex) {
+            return null;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+    
     public Conta findConta(Integer id) {
         EntityManager em = getEntityManager();
         try {
@@ -265,5 +280,5 @@ public class ContaJpaController implements Serializable {
             em.close();
         }
     }
-
+    
 }
