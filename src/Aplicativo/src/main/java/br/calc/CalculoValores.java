@@ -19,6 +19,7 @@ public abstract class CalculoValores {
     
     public final Conta atualizarValores(Conta conta) {
         conta = zerarValores(conta);
+        conta = calculoValorIndividual(conta);
         
         return conta;
     }
@@ -30,6 +31,23 @@ public abstract class CalculoValores {
         for (UsuarioConta usuarioConta : conta.getUsuarioContaCollection()) {
             usuarioConta.setUCValor(0.0);
         }
+        
+        return conta;
+    }
+    
+     public Conta calculoValorIndividual(Conta conta) {
+        
+        for (Produto produto : conta.getProdutoCollection()) {
+            double fatia = produto.getPValor() / produto.getUsuarioCollection().size();
+            
+            for (Usuario usuario : produto.getUsuarioCollection()) {
+                for (UsuarioConta usuarioConta : usuario.getUsuarioContaCollection()) {
+                    if (Objects.equals(usuarioConta.getConta().getCId(), conta.getCId())) {
+                        usuarioConta.setUCValor(usuarioConta.getUCValor() + fatia);
+                    }
+                }
+            }
+        }        
         
         return conta;
     }
