@@ -19,7 +19,9 @@ public abstract class CalculoValores {
     
     public final Conta atualizarValores(Conta conta) {
         conta = zerarValores(conta);
+        conta = calculoValorTotal(conta);
         conta = calculoValorIndividual(conta);
+        conta = calculoTaxaServico(conta);
         
         return conta;
     }
@@ -34,8 +36,16 @@ public abstract class CalculoValores {
         
         return conta;
     }
+    public Conta calculoValorTotal(Conta conta) {        
+        
+        for (Produto produto : conta.getProdutoCollection()) {
+            conta.setCValor(conta.getCValor() + produto.getPValor());
+        }
+        
+        return conta;
+    } 
     
-     public Conta calculoValorIndividual(Conta conta) {
+    public Conta calculoValorIndividual(Conta conta) {
         
         for (Produto produto : conta.getProdutoCollection()) {
             double fatia = produto.getPValor() / produto.getUsuarioCollection().size();
@@ -51,5 +61,7 @@ public abstract class CalculoValores {
         
         return conta;
     }
+    
+    public abstract Conta calculoTaxaServico(Conta conta);
     
 }
