@@ -81,18 +81,6 @@ public class ProdutoJpaController implements Serializable {
         }
     }
 
-    public List<Usuario> getAllUsersFromProduct(int id) {
-        EntityManager em = emf.createEntityManager();
-        List<Usuario> users = em.createNamedQuery("getAllUsersFromProduct", Usuario.class).setParameter(1, id).getResultList();
-        return users;
-    }
-
-    public List<Usuario> getAllUsersFromAccount(int id) {
-        EntityManager em = emf.createEntityManager();
-        List<Usuario> users = em.createNamedQuery("getAllUsersFromAccount", Usuario.class).setParameter(1, id).getResultList();
-        return users;
-    }
-
     public void edit(Produto produto) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
@@ -228,5 +216,5 @@ public class ProdutoJpaController implements Serializable {
             em.close();
         }
     }
-
+    
 }

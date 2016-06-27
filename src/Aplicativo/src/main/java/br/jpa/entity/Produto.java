@@ -5,7 +5,6 @@
  */
 package br.jpa.entity;
 
-import br.jpa.controller.ProdutoJpaController;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
@@ -18,8 +17,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedNativeQueries;
-import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -40,20 +37,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Produto.findByPId", query = "SELECT p FROM Produto p WHERE p.pId = :pId"),
     @NamedQuery(name = "Produto.findByPNome", query = "SELECT p FROM Produto p WHERE p.pNome = :pNome"),
     @NamedQuery(name = "Produto.findByPValor", query = "SELECT p FROM Produto p WHERE p.pValor = :pValor")})
-
-@NamedNativeQueries({
-    @NamedNativeQuery(
-            name = "getAllUsersFromProduct",
-            query = "select * from usuario u, produto_usuario pu where (u.u_nome = pu.u_nome) and pu.p_id=?;",
-            resultClass = Usuario.class
-    ),
-    @NamedNativeQuery(
-            name = "getAllUsersFromAccount",
-            query = "select * from usuario u, usuario_conta uc where (u.u_nome = uc.u_nome) and uc.c_id=?;",
-            resultClass = Usuario.class
-    )
-
-})
 public class Produto implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -120,9 +103,9 @@ public class Produto implements Serializable {
     public void setPValor(double pValor) {
         this.pValor = pValor;
     }
-
-    public int getQtdUsersProduct(int id) {
-        return ProdutoJpaController.getInstance().getAllUsersFromProduct(id).size();
+    
+    public int qtdeUsuarioProduto() {
+        return usuarioCollection.size();
     }
 
     @XmlTransient
@@ -166,5 +149,5 @@ public class Produto implements Serializable {
     public String toString() {
         return "br.jpa.entity.Produto[ pId=" + pId + " ]";
     }
-
+    
 }
