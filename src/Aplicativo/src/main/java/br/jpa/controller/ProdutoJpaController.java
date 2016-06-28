@@ -45,7 +45,8 @@ public class ProdutoJpaController implements Serializable {
         return pjc;
     }
 
-    public void create(Produto produto) {
+    public boolean create(Produto produto) {
+        boolean armazenado = false;
         if (produto.getUsuarioCollection() == null) {
             produto.setUsuarioCollection(new ArrayList<Usuario>());
         }
@@ -74,11 +75,13 @@ public class ProdutoJpaController implements Serializable {
                 usuarioCollectionUsuario = em.merge(usuarioCollectionUsuario);
             }
             em.getTransaction().commit();
+            armazenado = true;
         } finally {
             if (em != null) {
                 em.close();
             }
         }
+        return armazenado;
     }
 
     public void edit(Produto produto) throws NonexistentEntityException, Exception {
@@ -140,7 +143,8 @@ public class ProdutoJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException {
+    public boolean destroy(Integer id) throws NonexistentEntityException {
+        boolean remover = false;
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -164,11 +168,13 @@ public class ProdutoJpaController implements Serializable {
             }
             em.remove(produto);
             em.getTransaction().commit();
+            remover = true;
         } finally {
             if (em != null) {
                 em.close();
             }
         }
+        return remover;
     }
 
     public List<Produto> findProdutoEntities() {
@@ -216,5 +222,5 @@ public class ProdutoJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }

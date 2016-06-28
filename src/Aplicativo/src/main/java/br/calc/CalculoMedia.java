@@ -14,7 +14,7 @@ import java.util.Collection;
  */
 public abstract class CalculoMedia {
 
-    public static double calculoEstimativaTotal(Collection<UsuarioConta> usuarioConta) {
+    public static double calculoMedia(Collection<UsuarioConta> usuarioConta) {
         double soma = 0.0;
 
         for (UsuarioConta uc : usuarioConta) {

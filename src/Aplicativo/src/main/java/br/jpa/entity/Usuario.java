@@ -127,13 +127,6 @@ public class Usuario implements Serializable {
         return hash;
     }
     
-    public double getMediaUsuario(String nome) {
-        UsuarioJpaController ujc = UsuarioJpaController.getInstance();
-        Usuario u = ujc.findUsuario(nome);
-        return CalculoMedia.calculoEstimativaTotal(u.getUsuarioContaCollection());
-
-    }
-
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set

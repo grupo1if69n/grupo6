@@ -81,7 +81,13 @@ public class ProdutoBean {
         this.produto.setCId(ContaJpaController.getInstance().findConta((int) SessionContext.getInstance().getSessionAttribute("cId")));
         this.produto.setUsuarioCollection(pUsuarios);
 
-        ProdutoJpaController.getInstance().create(this.produto);
+        boolean resposta = ProdutoJpaController.getInstance().create(this.produto);
+
+        if (resposta) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Produto: \"" + produto.getPNome() + "\" adicionado com sucesso", ""));
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Produto: \"" + produto.getPNome() + " \" não adicionado", ""));
+        }
 
         //permite atualizar em tempo real os valores para todos usuários
         this.atualizarValores();
@@ -89,8 +95,13 @@ public class ProdutoBean {
 
     public void excluirProduto(int pId) {
         try {
-            ProdutoJpaController.getInstance().destroy(pId);
-
+            boolean resposta = ProdutoJpaController.getInstance().destroy(pId);
+            
+            if (resposta) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Produto removido com sucesso", ""));
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Produto não foi removido", ""));
+            }
             //permite atualizar em tempo real os valores para todos usuários
             this.atualizarValores();
         } catch (NonexistentEntityException ex) {

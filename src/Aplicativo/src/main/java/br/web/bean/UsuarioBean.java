@@ -5,6 +5,7 @@
  */
 package br.web.bean;
 
+import br.calc.CalculoMedia;
 import br.jpa.controller.UsuarioJpaController;
 import br.jpa.entity.Usuario;
 import br.web.utils.SessionContext;
@@ -65,6 +66,13 @@ public class UsuarioBean {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Senhas não coincidem!", "Falha no cadastro!");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
+    }
+
+    public double getMediaUsuario(String nome) {
+        UsuarioJpaController ujc = UsuarioJpaController.getInstance();
+        Usuario u = ujc.findUsuario(nome);
+        return CalculoMedia.calculoMedia(u.getUsuarioContaCollection());
+
     }
 
     public void atualizarUsuario() {

@@ -52,7 +52,7 @@ public abstract class CalculoValores {
             
             for (Usuario usuario : produto.getUsuarioCollection()) {
                 for (UsuarioConta usuarioConta : usuario.getUsuarioContaCollection()) {
-                    if (Objects.equals(usuarioConta.getConta().getCId(), conta.getCId())) {
+                    if (Objects.equals(usuarioConta.getUsuarioContaPK().getCId(), conta.getCId())) {
                         usuarioConta.setUCValor(usuarioConta.getUCValor() + fatia);
                     }
                 }

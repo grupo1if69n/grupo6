@@ -52,7 +52,7 @@
 
                     <p:outputLabel for="cMedia" 
                                    value="Média de gastos: " />
-                    <h:outputText id="cMedia" value="#{usuario.getMediaUsuario(usuario.UNome)}">
+                    <h:outputText id="cMedia" value="#{usuarioBean.getMediaUsuario(usuario.UNome)}">
                         <f:convertNumber type="currency" currencySymbol="R$" />
                     </h:outputText>
                 </h:panelGrid>
