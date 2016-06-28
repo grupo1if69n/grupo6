@@ -20,7 +20,11 @@ public abstract class CalculoMedia {
         for (UsuarioConta uc : usuarioConta) {
             soma += uc.getUCValor();
         }
-        return (soma / usuarioConta.size());
+        if (usuarioConta.size() == 0) {
+            return 0.0;
+        } else {
+            return (soma / usuarioConta.size());
+        }
     }
 
 }
