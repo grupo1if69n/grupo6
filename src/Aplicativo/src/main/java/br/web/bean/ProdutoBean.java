@@ -5,7 +5,6 @@
  */
 package br.web.bean;
 
-import br.calc.CalculoValores;
 import br.calc.TaxaServicoIgual;
 import br.jpa.controller.ContaJpaController;
 import br.jpa.controller.ProdutoJpaController;
@@ -84,12 +83,15 @@ public class ProdutoBean {
 
         ProdutoJpaController.getInstance().create(this.produto);
 
+        //permite atualizar em tempo real os valores para todos usuários
         this.atualizarValores();
     }
 
     public void excluirProduto(int pId) {
         try {
             ProdutoJpaController.getInstance().destroy(pId);
+
+            //permite atualizar em tempo real os valores para todos usuários
             this.atualizarValores();
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(ProdutoBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -116,6 +118,8 @@ public class ProdutoBean {
 
         try {
             ProdutoJpaController.getInstance().edit(this.produto);
+
+            //permite atualizar em tempo real os valores para todos usuários
             this.atualizarValores();
             FacesContext.getCurrentInstance().getExternalContext().redirect("/Aplicativo/faces/gerenciar_conta.xhtml");
         } catch (Exception ex) {
@@ -125,6 +129,7 @@ public class ProdutoBean {
         }
     }
 
+    //permite atualizar em tempo real os valores para todos usuários
     private void atualizarValores() {
         Conta contaAtualizada = new TaxaServicoIgual().atualizarValores(ContaJpaController.getInstance().findConta((int) SessionContext.getInstance().getSessionAttribute("cId")));
 
@@ -132,7 +137,7 @@ public class ProdutoBean {
             for (UsuarioConta usuarioConta : contaAtualizada.getUsuarioContaCollection()) {
                 UsuarioContaJpaController.getInstance().edit(usuarioConta);
             }
-            
+
             ContaJpaController.getInstance().edit(contaAtualizada);
         } catch (Exception ex) {
             System.out.println(ex.toString());

@@ -24,6 +24,14 @@
         <filter-name>EditarProdutoFilter</filter-name>
         <filter-class>br.web.filter.EditarProdutoFilter</filter-class>
     </filter>
+    <filter>
+        <filter-name>FecharContaFilter</filter-name>
+        <filter-class>br.web.filter.FecharContaFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>FecharContaFilter</filter-name>
+        <url-pattern>/faces/fechar_conta.xhtml</url-pattern>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>EditarProdutoFilter</filter-name>
         <url-pattern>/faces/editar_produto.xhtml</url-pattern>

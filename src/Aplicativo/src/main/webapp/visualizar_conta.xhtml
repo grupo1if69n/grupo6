@@ -26,7 +26,8 @@
 
         <br />
 
-        <p:panel header="Informações">
+        <p:panel header="Informações"
+                 id="panelInformacoes">
             <h:form>
                 <h:panelGrid columns="2">                
                     <p:outputLabel for="cNome" 
@@ -74,6 +75,8 @@
                         <f:convertNumber type="currency" currencySymbol="R$" />
                     </h:outputText>
                 </h:panelGrid>
+                
+                <p:poll interval="5" update=":panelInformacoes" />
             </h:form>
         </p:panel>
 
@@ -93,7 +96,9 @@
                             <f:convertNumber type="currency" currencySymbol="R$" />
                         </h:outputText>
                     </p:column>
-                </p:dataTable> 
+                </p:dataTable>                
+                
+                <p:poll interval="5" update=":panelGerenciar" />
             </h:form>
         </p:panel>
 
@@ -132,6 +137,8 @@
                         </p:dataTable>
                     </p:rowExpansion>
                 </p:dataTable>
+                
+                <p:poll interval="5" update=":panelProdutos" />
             </h:form> 
         </p:panel> 
     </h:body>

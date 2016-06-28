@@ -156,39 +156,22 @@ public class ContaBean {
             System.out.println(ex.toString());
         }
     }
-    
-    public double estimativaTotal() {   
+
+    public double estimativaTotal() {
         return CalculoEstimativa.calculoEstimativaTotal(ContaJpaController.getInstance().findContaPorNome(this.getContaSession().getCNome()));
     }
-    
+
     public double estimativaIndividual() {
         Collection<UsuarioConta> usuarioContas = new ArrayList<>();
         Usuario usuario = this.getUsuarioSession();
         Conta contaAux = this.getContaSession();
         for (UsuarioConta usuarioConta1 : usuario.getUsuarioContaCollection()) {
-            if(usuarioConta1.getConta().getCNome().equals(contaAux.getCNome()) && usuarioConta1.getUCValor() != 0.0) {
+            if (usuarioConta1.getConta().getCNome().equals(contaAux.getCNome()) && usuarioConta1.getUCValor() != 0.0) {
                 usuarioContas.add(usuarioConta1);
             }
         }
-        
+
         return CalculoEstimativa.calculoEstimativaIndividual(usuarioContas);
-    }
-
-    public void redirectFecharConta() {
-        Conta contaFechada = this.getContaSession();
-
-        if (contaFechada.getCValor() == 0) {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conta sem consumo não pode ser fechada!", "Conta sem consumo não pode ser fechada!");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-        } else {
-            try {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("/Aplicativo/faces/fechar_conta.xhtml");
-            } catch (IOException ex) {
-                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro ao fechar conta!", "Erro ao fechar conta!");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-                System.out.println(ex.toString());
-            }
-        }
     }
 
     public void fecharConta() {
@@ -198,6 +181,8 @@ public class ContaBean {
 
         try {
             ContaJpaController.getInstance().edit(contaFechada);
+
+            //permite atualizar em tempo real os valores para todos usuários
             this.atualizarValores(contaFechada);
             FacesContext.getCurrentInstance().getExternalContext().redirect("/Aplicativo/faces/visualizar_conta.xhtml");
         } catch (Exception ex) {
@@ -207,6 +192,7 @@ public class ContaBean {
         }
     }
 
+    //permite atualizar em tempo real os valores para todos usuários
     private void atualizarValores(Conta contaAtualizada) {
         CalculoValores calculoValores;
 

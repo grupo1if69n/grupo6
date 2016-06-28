@@ -27,40 +27,40 @@
             </f:facet>
 
             <f:facet name="right">
-                <h:form>                    
-                    <span class="ui-separator">
-                        <span class="ui-icon ui-icon-grip-dotted-vertical" />
-                    </span>
-
-                    <h:outputText value="Usuario Online: #{usuario.UNome}  " />
-
-                    <span class="ui-separator">
-                        <span class="ui-icon ui-icon-grip-dotted-vertical" />
-                    </span>
-
-                    <h:outputText value="Celular: #{usuario.UCelular}  " />
-
-                    <span class="ui-separator">
-                        <span class="ui-icon ui-icon-grip-dotted-vertical" />
-                    </span>
-
-                    <p:outputLabel for="cMedia" 
-                                   value="Média Consumo: " />
-                    <h:outputText id="cMedia" value="#{usuario.getMediaUsuario(usuario.UNome)}">
-                        <f:convertNumber type="currency" currencySymbol="R$" />
-                    </h:outputText>
-
-
-                    <span class="ui-separator">
-                        <span class="ui-icon ui-icon-grip-dotted-vertical" />
-                    </span> 
-
+                <h:form>     
                     <p:commandButton action="#{loginBean.logout()}"
                                      value="Sair" />                    
                 </h:form>
             </f:facet>            
         </p:toolbar>
 
+        <br />
+
+        <p:panel id="panelUsuario"
+                 header="Informações do usuário">
+            <h:form>
+                <h:panelGrid columns="2">
+                    <p:outputLabel for="uNome"
+                                   value="Usuário online: " />
+                    <h:outputText id="uNome"
+                                  value="#{usuario.UNome}" />
+
+                    <p:outputLabel for="uCelular"
+                                   value="Celular: " />
+                    <h:outputText id="uCelular"
+                                  value="#{usuario.UCelular}" />
+
+                    <p:outputLabel for="cMedia" 
+                                   value="Média de gastos: " />
+                    <h:outputText id="cMedia" value="#{usuario.getMediaUsuario(usuario.UNome)}">
+                        <f:convertNumber type="currency" currencySymbol="R$" />
+                    </h:outputText>
+                </h:panelGrid>
+
+                <p:poll interval="5" update=":panelUsuario" />
+            </h:form>
+        </p:panel>
+        
         <br />
 
         <p:panel id="panelContas"
@@ -78,14 +78,16 @@
                         <f:validateLength minimum="1" maximum="30" />
                     </p:inputText>
                     <p:commandButton action="#{contaBean.cadastrarConta()}"
-                                     update=":panelContas"
+                                     update=":panelContas, :panelUsuario"
                                      value="Criar">
                         <p:resetInput target=":panelContas" />
                     </p:commandButton>
                 </h:panelGrid>
+            </h:form>
 
-                <br />
-
+            <br />
+            
+            <h:form>
                 <p:dataTable id="contas"
                              value="#{usuario.usuarioContaCollection}"
                              emptyMessage="Nenhuma conta encontrada."
@@ -112,6 +114,8 @@
                                          value="Acessar" />
                     </p:column>
                 </p:dataTable>
+
+                <p:poll interval="5" update="contas" />
             </h:form>
         </p:panel>
     </h:body>

@@ -5,7 +5,6 @@
  */
 package br.calc;
 
-import br.jpa.entity.Conta;
 import br.jpa.entity.UsuarioConta;
 import java.util.Collection;
 
